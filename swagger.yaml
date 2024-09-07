@@ -1,0 +1,103 @@
+swagger: "2.0"
+info:
+  description: "This is a card-project"
+  version: "1.0.0"
+  title: "card-project"
+host: "localhost:8080"
+basePath: "/v1"
+schemes:
+  - "http"
+paths:
+  /users:
+    get:
+      summary: "Get list of users"
+      responses:
+        200:
+          description: "Ok"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+        default:
+          description: Общая ошибка
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      summary: "Create a new user"
+      parameters:
+        - in: body
+          name: user
+          description: "User to be created"
+          required: true
+          schema:
+            $ref: "#/definitions/NewUser"
+      responses:
+        201:
+          description: "User created"
+          schema:
+            $ref: "#/definitions/User"
+        default:
+          description: Общая ошибка
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/{id}:
+    get:
+      summary: "Get a user by ID"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: "User not found"
+        default:
+          description: Общая ошибка
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      summary: "Delete a user by ID"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: "User deleted"
+        default:
+          description: Общая ошибка
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+  NewUser:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+  ErrorResponse:
+    title: ErrorResponse
+    description: Общая ошибка
+    allOf:
+      - properties:
+          error:
+            type: object
+            properties:
+              message:
+                description: Message
+                type: string
