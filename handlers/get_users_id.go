@@ -9,7 +9,6 @@ import (
 
 func (h *handlers) GetUsersID(params operations.GetUsersIDParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
-
 	user, err := h.controller.GetUserID(ctx, params.ID)
 
 	if err != nil {

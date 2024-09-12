@@ -20,11 +20,11 @@ type RootBootstrapper struct {
 	Infrastructure struct {
 		// Logger
 		Server *restapi.Server
-		DB database.DB
+		DB     database.DB
 	}
 	Controller controller.Controller
-	Config *config.Config
-	Handlers handlers.Handlers
+	Config     *config.Config
+	Handlers   handlers.Handlers
 	Repository repositories.UsersRepo
 }
 
@@ -34,10 +34,9 @@ type RootBoot interface {
 	RunAPI() error
 }
 
-func New() RootBoot{
+func New() RootBoot {
 	return RootBootstrapper{}
 }
-
 
 func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
@@ -48,7 +47,6 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 	api := operations.NewCardProjectAPI(swaggerSpec)
 
 	r.Controller = controller.New(r.Repository)
-
 
 	r.Handlers = handlers.New(r.Controller)
 	r.Handlers.Link(api)
@@ -72,8 +70,7 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 // 	return nil
 // }
 
-
-func (r RootBootstrapper) RunAPI() error{
+func (r RootBootstrapper) RunAPI() error {
 	ctx := context.Background()
 	r.Config = config.NewConfig()
 
@@ -82,14 +79,10 @@ func (r RootBootstrapper) RunAPI() error{
 	// err := r.registerRepositoties(r.Infrastructure.DB)
 	r.Repository = repositories.NewUserRepo(r.Infrastructure.DB)
 
-
 	err := r.registerAPIServer(*r.Config)
 	if err != nil {
 		log.Fatal("cant start server")
 	}
-
-
-
 
 	return nil
 }

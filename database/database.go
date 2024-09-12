@@ -9,8 +9,6 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-
-
 type db struct {
 	conn *pgx.Conn
 }
@@ -24,8 +22,7 @@ func NewDB() DB {
 	return &db{}
 }
 
-
-func (db *db) NewConn(ctx context.Context, connConfigString string, config config.Config) DB{
+func (db *db) NewConn(ctx context.Context, connConfigString string, config config.Config) DB {
 	connString := fmt.Sprintf(connConfigString, config.Database.User, config.Database.Password, config.Database.Host, config.Database.Port, config.Database.Name)
 
 	conn, err := pgx.Connect(ctx, connString)
@@ -42,6 +39,6 @@ func (db *db) NewConn(ctx context.Context, connConfigString string, config confi
 	return db
 }
 
-func (db *db) GetConn() *pgx.Conn{
+func (db *db) GetConn() *pgx.Conn {
 	return db.conn
 }

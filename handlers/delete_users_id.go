@@ -9,13 +9,20 @@ import (
 
 func (h *handlers) DeleteUsersID(params operations.DeleteUsersIDParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
+	commandTag, err := h.controller.DeleteUserID(ctx, params.ID)
 
-	err := h.controller.DeleteUserID(ctx, params.ID)
-
-	if err != nil {
+	if commandTag.RowsAffected() == 0 {
 		return operations.NewDeleteUsersIDDefault(404).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to GET User in storage, user id: " + params.ID,
+				Message: "user not found, user id: " + params.ID,
+			},
+		})
+	}
+
+	if err != nil {
+		return operations.NewDeleteUsersIDDefault(500).WithPayload(&models.ErrorResponse{
+			Error: &models.ErrorResponseAO0Error{
+				Message: "Failed to DELETE User in storage, user id: " + params.ID,
 			},
 		})
 	}

@@ -9,7 +9,6 @@ import (
 
 func (h *handlers) PostUsers(params operations.PostUsersParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
-
 	user, err := h.controller.PostUser(ctx, *params.User)
 
 	if err != nil {
