@@ -1,6 +1,7 @@
 package database
 
 import (
+	"card-project/config"
 	"context"
 	"fmt"
 	"log"
@@ -9,14 +10,13 @@ import (
 )
 
 
-var ctx = context.Background()
 
 type db struct {
-	Conn *pgx.Conn
+	conn *pgx.Conn
 }
 
 type DB interface {
-	NewConn(connConfigString string, user string, password string, host string, port int, dbname string) DB
+	NewConn(ctx context.Context, connConfigString string, config config.Config) DB
 	GetConn() *pgx.Conn
 }
 
@@ -25,12 +25,10 @@ func NewDB() DB {
 }
 
 
-func (db *db) NewConn(connConfigString string, user string, password string, host string, port int, dbname string) DB{
-
-	connString := fmt.Sprintf(connConfigString, user, password, host, port, dbname)
+func (db *db) NewConn(ctx context.Context, connConfigString string, config config.Config) DB{
+	connString := fmt.Sprintf(connConfigString, config.Database.User, config.Database.Password, config.Database.Host, config.Database.Port, config.Database.Name)
 
 	conn, err := pgx.Connect(ctx, connString)
-	// defer db.Close(context.Background())
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 	}
@@ -40,11 +38,10 @@ func (db *db) NewConn(connConfigString string, user string, password string, hos
 		log.Fatalf("Failed to ping the database: %v\n", err)
 	}
 
-	db.Conn = conn
-
+	db.conn = conn
 	return db
 }
 
 func (db *db) GetConn() *pgx.Conn{
-	return db.Conn
+	return db.conn
 }

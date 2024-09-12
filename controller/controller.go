@@ -1,49 +1,41 @@
 package controller
 
 import (
-	"card-project/database"
 	"card-project/models"
+	repositories "card-project/repositories/users"
 	"context"
-
-	"github.com/jackc/pgx/v5"
-)
-
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "098098"
-	dbname   = "CardProject"
-
-	connConfigString = "postgres://%s:%s@%s:%d/%s"
 )
 
 type controller struct {
-	db  database.DB
-	ctx context.Context
+	repository repositories.UsersRepo
 }
 
 type Controller interface {
-	GetUserID(id string) (models.NewUser, error)
+	GetUserID(ctx context.Context, id string) (models.User, error)
+	PostUser(ctx context.Context, user models.NewUser) (models.User, error)
+	DeleteUserID(ctx context.Context, id string) error
 }
 
-func New() Controller {
+func New(repository repositories.UsersRepo) Controller {
 	return controller{
-		db:  database.NewDB().NewConn(connConfigString, user, password, host, port, dbname),
-		ctx: context.Background(),
+		repository: repository,
 	}
 }
 
-func (c controller) GetUserID(id string) (models.NewUser, error) {
-	query := `select first_name, last_name from users where id = @userID`
-
-	args := pgx.NamedArgs{
-		"userID": id,
-	}
-
-	user := models.NewUser{}
-
-	err := c.db.GetConn().QueryRow(c.ctx, query, args).Scan(&user.FirstName, &user.LastName)
+func (c controller) GetUserID(ctx context.Context, id string) (models.User, error) {
+	user, err := c.repository.GetUserID(ctx, id)
 
 	return user, err
+}
+
+func (c controller) PostUser(ctx context.Context, userData models.NewUser) (models.User, error) {
+	user, err := c.repository.PostUser(ctx, userData)
+
+	return user, err
+}
+
+func (c controller) DeleteUserID(ctx context.Context, id string) error {
+	err := c.repository.DeleteUserID(ctx, id)
+
+	return err
 }

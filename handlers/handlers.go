@@ -7,21 +7,25 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-type handlers struct{
+type handlers struct {
 	controller controller.Controller
 }
 
 type Handlers interface {
 	GetUsersID(params operations.GetUsersIDParams) middleware.Responder
-	Init(api *operations.CardProjectAPI)
+	PostUsers(params operations.PostUsersParams) middleware.Responder
+	DeleteUsersID(params operations.DeleteUsersIDParams) middleware.Responder
+	Link(api *operations.CardProjectAPI)
 }
 
-func New() Handlers {
+func New(controller controller.Controller) Handlers {
 	return &handlers{
-		controller: controller.New(),
+		controller: controller,
 	}
 }
 
-func (h *handlers) Init(api *operations.CardProjectAPI) {
+func (h *handlers) Link(api *operations.CardProjectAPI) {
 	api.GetUsersIDHandler = operations.GetUsersIDHandlerFunc(h.GetUsersID)
+	api.PostUsersHandler = operations.PostUsersHandlerFunc(h.PostUsers)
+	api.DeleteUsersIDHandler = operations.DeleteUsersIDHandlerFunc(h.DeleteUsersID)
 }

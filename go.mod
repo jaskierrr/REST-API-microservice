@@ -12,6 +12,7 @@ require (
 	github.com/go-openapi/validate v0.24.0
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/jessevdk/go-flags v1.6.1
+	github.com/joho/godotenv v1.5.1
 	golang.org/x/net v0.28.0
 )
 
