@@ -2,14 +2,14 @@ package controller
 
 import (
 	"card-project/models"
-	repositories "card-project/repositories/users"
+	"card-project/service"
 	"context"
 
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
 type controller struct {
-	repository repositories.UsersRepo
+	service service.Service
 }
 
 type Controller interface {
@@ -19,32 +19,32 @@ type Controller interface {
 	GetUsers(ctx context.Context) ([]*models.User, error)
 }
 
-func New(repository repositories.UsersRepo) Controller {
+func New(service service.Service) Controller {
 	return controller{
-		repository: repository,
+		service: service,
 	}
 }
 
 func (c controller) GetUserID(ctx context.Context, id string) (models.User, error) {
-	user, err := c.repository.GetUserID(ctx, id)
+	user, err := c.service.GetUserID(ctx, id)
 
 	return user, err
 }
 
 func (c controller) PostUser(ctx context.Context, userData models.NewUser) (models.User, error) {
-	user, err := c.repository.PostUser(ctx, userData)
+	user, err := c.service.PostUser(ctx, userData)
 
 	return user, err
 }
 
 func (c controller) DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error) {
-	commandTag, err := c.repository.DeleteUserID(ctx, id)
+	commandTag, err := c.service.DeleteUserID(ctx, id)
 
 	return commandTag, err
 }
 
 func (c controller) GetUsers(ctx context.Context) ([]*models.User, error) {
-	user, err := c.repository.GetUsers(ctx)
+	user, err := c.service.GetUsers(ctx)
 
 	return user, err
 }

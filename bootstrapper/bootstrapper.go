@@ -8,6 +8,7 @@ import (
 	repositories "card-project/repositories/users"
 	"card-project/restapi"
 	"card-project/restapi/operations"
+	"card-project/service"
 	"context"
 	"log"
 
@@ -26,11 +27,12 @@ type RootBootstrapper struct {
 	Config     *config.Config
 	Handlers   handlers.Handlers
 	Repository repositories.UsersRepo
+	Service    service.Service
 }
 
 type RootBoot interface {
 	registerAPIServer(cfg config.Config) error
-	// registerRepositoties(db database.DB) error
+	// registerRepositoriesAndServices(db database.DB)
 	RunAPI() error
 }
 
@@ -48,7 +50,7 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 
 	api := operations.NewCardProjectAPI(swaggerSpec)
 
-	r.Controller = controller.New(r.Repository)
+	r.Controller = controller.New(r.Service)
 
 	r.Handlers = handlers.New(r.Controller)
 	r.Handlers.Link(api)
@@ -66,10 +68,9 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 	return nil
 }
 
-// func (r RootBootstrapper) registerRepositoties(db database.DB) error{
+// func (r RootBootstrapper) registerRepositoriesAndServices(db database.DB) {
 // 	r.Repository = repositories.NewUserRepo(db)
-
-// 	return nil
+// 	r.Service = service.New(r.Repository)
 // }
 
 func (r RootBootstrapper) RunAPI() error {
@@ -77,8 +78,10 @@ func (r RootBootstrapper) RunAPI() error {
 
 	r.Infrastructure.DB = database.NewDB().NewConn(ctx, connConfigString, *r.Config)
 
-	// err := r.registerRepositoties(r.Infrastructure.DB)
+	// r.registerRepositoriesAndServices(r.Infrastructure.DB)
+
 	r.Repository = repositories.NewUserRepo(r.Infrastructure.DB)
+	r.Service = service.New(r.Repository)
 
 	err := r.registerAPIServer(*r.Config)
 	if err != nil {
