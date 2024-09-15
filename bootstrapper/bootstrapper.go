@@ -35,7 +35,9 @@ type RootBoot interface {
 }
 
 func New() RootBoot {
-	return RootBootstrapper{}
+	return RootBootstrapper{
+		Config: config.NewConfig(),
+	}
 }
 
 func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
@@ -72,7 +74,6 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 
 func (r RootBootstrapper) RunAPI() error {
 	ctx := context.Background()
-	r.Config = config.NewConfig()
 
 	r.Infrastructure.DB = database.NewDB().NewConn(ctx, connConfigString, *r.Config)
 

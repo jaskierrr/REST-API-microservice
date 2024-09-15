@@ -2,21 +2,22 @@ package config
 
 import (
 	"log"
-	"os"
-	"strconv"
 
 	"github.com/joho/godotenv"
+	"github.com/kelseyhightower/envconfig"
 )
 
 type Config struct {
-	Database struct{
-		Host     string
-		Port     string
-		User     string
-		Password string
-		Name     string
-	}
-	ServerPort int
+	Database   Database `envconfig:"DB" required:"true"`
+	ServerPort int      `envconfig:"PORT_ServerPort" required:"true" default:"8080"`
+}
+
+type Database struct {
+	Host     string `envconfig:"DB_Host" required:"true"`
+	Port     string `envconfig:"DB_Port" required:"true"`
+	User     string `envconfig:"DB_User" required:"true"`
+	Password string `envconfig:"DB_Password" required:"true"`
+	Name     string `envconfig:"DB_Name" required:"true"`
 }
 
 func NewConfig() *Config {
@@ -25,17 +26,11 @@ func NewConfig() *Config {
 		log.Println("No .env file found")
 	}
 
-	port, _ := strconv.Atoi(os.Getenv("ServerPort"))
+	cfg := &Config{}
 
-	return &Config{
-		Database: struct{Host string; Port string; User string; Password string; Name string}{
-			Host: os.Getenv("DBHost"),
-			Port: os.Getenv("DBPort"),
-			User: os.Getenv("DBUser"),
-			Password: os.Getenv("DBPassword"),
-			Name: os.Getenv("DBName"),
-		},
-
-		ServerPort: port,
+	if err := envconfig.Process("", cfg); err != nil {
+		log.Fatal("Failed load envconfig")
 	}
+
+	return cfg
 }
