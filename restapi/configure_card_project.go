@@ -37,9 +37,39 @@ func configureAPI(api *operations.CardProjectAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
+	if api.DeleteBanksIDHandler == nil {
+		api.DeleteBanksIDHandler = operations.DeleteBanksIDHandlerFunc(func(params operations.DeleteBanksIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.DeleteBanksID has not yet been implemented")
+		})
+	}
+	if api.DeleteCardsIDHandler == nil {
+		api.DeleteCardsIDHandler = operations.DeleteCardsIDHandlerFunc(func(params operations.DeleteCardsIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.DeleteCardsID has not yet been implemented")
+		})
+	}
 	if api.DeleteUsersIDHandler == nil {
 		api.DeleteUsersIDHandler = operations.DeleteUsersIDHandlerFunc(func(params operations.DeleteUsersIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation operations.DeleteUsersID has not yet been implemented")
+		})
+	}
+	if api.GetBanksHandler == nil {
+		api.GetBanksHandler = operations.GetBanksHandlerFunc(func(params operations.GetBanksParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.GetBanks has not yet been implemented")
+		})
+	}
+	if api.GetBanksIDHandler == nil {
+		api.GetBanksIDHandler = operations.GetBanksIDHandlerFunc(func(params operations.GetBanksIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.GetBanksID has not yet been implemented")
+		})
+	}
+	if api.GetCardsHandler == nil {
+		api.GetCardsHandler = operations.GetCardsHandlerFunc(func(params operations.GetCardsParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.GetCards has not yet been implemented")
+		})
+	}
+	if api.GetCardsIDHandler == nil {
+		api.GetCardsIDHandler = operations.GetCardsIDHandlerFunc(func(params operations.GetCardsIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.GetCardsID has not yet been implemented")
 		})
 	}
 	if api.GetUsersHandler == nil {
@@ -50,6 +80,31 @@ func configureAPI(api *operations.CardProjectAPI) http.Handler {
 	if api.GetUsersIDHandler == nil {
 		api.GetUsersIDHandler = operations.GetUsersIDHandlerFunc(func(params operations.GetUsersIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation operations.GetUsersID has not yet been implemented")
+		})
+	}
+	if api.PatchBanksHandler == nil {
+		api.PatchBanksHandler = operations.PatchBanksHandlerFunc(func(params operations.PatchBanksParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.PatchBanks has not yet been implemented")
+		})
+	}
+	if api.PatchCardsHandler == nil {
+		api.PatchCardsHandler = operations.PatchCardsHandlerFunc(func(params operations.PatchCardsParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.PatchCards has not yet been implemented")
+		})
+	}
+	if api.PatchUsersHandler == nil {
+		api.PatchUsersHandler = operations.PatchUsersHandlerFunc(func(params operations.PatchUsersParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.PatchUsers has not yet been implemented")
+		})
+	}
+	if api.PostBanksHandler == nil {
+		api.PostBanksHandler = operations.PostBanksHandlerFunc(func(params operations.PostBanksParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.PostBanks has not yet been implemented")
+		})
+	}
+	if api.PostCardsHandler == nil {
+		api.PostCardsHandler = operations.PostCardsHandlerFunc(func(params operations.PostCardsParams) middleware.Responder {
+			return middleware.NotImplemented("operation operations.PostCards has not yet been implemented")
 		})
 	}
 	if api.PostUsersHandler == nil {

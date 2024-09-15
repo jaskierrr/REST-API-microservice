@@ -12,33 +12,30 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// User user
+// Bank bank
 //
-// swagger:model User
-type User struct {
+// swagger:model Bank
+type Bank struct {
 
-	// first name
-	FirstName string `json:"firstName,omitempty"`
+	// name
+	Name string `json:"Name,omitempty"`
 
 	// id
 	ID string `json:"id,omitempty"`
-
-	// last name
-	LastName string `json:"lastName,omitempty"`
 }
 
-// Validate validates this user
-func (m *User) Validate(formats strfmt.Registry) error {
+// Validate validates this bank
+func (m *Bank) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this user based on context it is used
-func (m *User) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this bank based on context it is used
+func (m *Bank) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *User) MarshalBinary() ([]byte, error) {
+func (m *Bank) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -46,8 +43,8 @@ func (m *User) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *User) UnmarshalBinary(b []byte) error {
-	var res User
+func (m *Bank) UnmarshalBinary(b []byte) error {
+	var res Bank
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

@@ -30,6 +30,266 @@ func init() {
   "host": "localhost:8080",
   "basePath": "/v1",
   "paths": {
+    "/banks": {
+      "get": {
+        "summary": "Get list of banks",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Bank"
+              }
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new bank",
+        "parameters": [
+          {
+            "description": "Bank to be created",
+            "name": "bank",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewBank"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Bank created",
+            "schema": {
+              "$ref": "#/definitions/Bank"
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch bank",
+        "parameters": [
+          {
+            "description": "Bank patched",
+            "name": "bank",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Bank"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Bank patched",
+            "schema": {
+              "$ref": "#/definitions/Bank"
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/banks/{id}": {
+      "get": {
+        "summary": "Get a bank by ID",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Bank"
+            }
+          },
+          "404": {
+            "description": "Bank not found"
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a bank by ID",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Bank deleted"
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cards": {
+      "get": {
+        "summary": "Get list of cards",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Card"
+              }
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new card",
+        "parameters": [
+          {
+            "description": "Card to be created",
+            "name": "card",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewCard"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Card created",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch card",
+        "parameters": [
+          {
+            "description": "Card to be patched",
+            "name": "card",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Card patched",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cards/{id}": {
+      "get": {
+        "summary": "Get a card by ID",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "404": {
+            "description": "Card not found"
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a card by ID",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Card deleted"
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "summary": "Get list of users",
@@ -67,6 +327,34 @@ func init() {
         "responses": {
           "201": {
             "description": "User created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch user",
+        "parameters": [
+          {
+            "description": "User patched",
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User patched",
             "schema": {
               "$ref": "#/definitions/User"
             }
@@ -134,6 +422,38 @@ func init() {
     }
   },
   "definitions": {
+    "Bank": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "Card": {
+      "type": "object",
+      "properties": {
+        "BankID": {
+          "type": "string"
+        },
+        "CreateDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Number": {
+          "type": "string"
+        },
+        "UserID": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
     "ErrorResponse": {
       "description": "Общая ошибка",
       "title": "ErrorResponse",
@@ -152,6 +472,32 @@ func init() {
           }
         }
       ]
+    },
+    "NewBank": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        }
+      }
+    },
+    "NewCard": {
+      "type": "object",
+      "properties": {
+        "BankID": {
+          "type": "string"
+        },
+        "CreateDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Number": {
+          "type": "string"
+        },
+        "UserID": {
+          "type": "string"
+        }
+      }
     },
     "NewUser": {
       "type": "object",
@@ -193,6 +539,266 @@ func init() {
   "host": "localhost:8080",
   "basePath": "/v1",
   "paths": {
+    "/banks": {
+      "get": {
+        "summary": "Get list of banks",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Bank"
+              }
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new bank",
+        "parameters": [
+          {
+            "description": "Bank to be created",
+            "name": "bank",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewBank"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Bank created",
+            "schema": {
+              "$ref": "#/definitions/Bank"
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch bank",
+        "parameters": [
+          {
+            "description": "Bank patched",
+            "name": "bank",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Bank"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Bank patched",
+            "schema": {
+              "$ref": "#/definitions/Bank"
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/banks/{id}": {
+      "get": {
+        "summary": "Get a bank by ID",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Bank"
+            }
+          },
+          "404": {
+            "description": "Bank not found"
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a bank by ID",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Bank deleted"
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cards": {
+      "get": {
+        "summary": "Get list of cards",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Card"
+              }
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new card",
+        "parameters": [
+          {
+            "description": "Card to be created",
+            "name": "card",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewCard"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Card created",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch card",
+        "parameters": [
+          {
+            "description": "Card to be patched",
+            "name": "card",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Card patched",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cards/{id}": {
+      "get": {
+        "summary": "Get a card by ID",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "404": {
+            "description": "Card not found"
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a card by ID",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Card deleted"
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "summary": "Get list of users",
@@ -230,6 +836,34 @@ func init() {
         "responses": {
           "201": {
             "description": "User created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "default": {
+            "description": "Общая ошибка",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch user",
+        "parameters": [
+          {
+            "description": "User patched",
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User patched",
             "schema": {
               "$ref": "#/definitions/User"
             }
@@ -297,6 +931,38 @@ func init() {
     }
   },
   "definitions": {
+    "Bank": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "Card": {
+      "type": "object",
+      "properties": {
+        "BankID": {
+          "type": "string"
+        },
+        "CreateDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Number": {
+          "type": "string"
+        },
+        "UserID": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
     "ErrorResponse": {
       "description": "Общая ошибка",
       "title": "ErrorResponse",
@@ -321,6 +987,32 @@ func init() {
       "properties": {
         "message": {
           "description": "Message",
+          "type": "string"
+        }
+      }
+    },
+    "NewBank": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        }
+      }
+    },
+    "NewCard": {
+      "type": "object",
+      "properties": {
+        "BankID": {
+          "type": "string"
+        },
+        "CreateDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Number": {
+          "type": "string"
+        },
+        "UserID": {
           "type": "string"
         }
       }

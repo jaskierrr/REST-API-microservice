@@ -42,14 +42,47 @@ func NewCardProjectAPI(spec *loads.Document) *CardProjectAPI {
 
 		JSONProducer: runtime.JSONProducer(),
 
+		DeleteBanksIDHandler: DeleteBanksIDHandlerFunc(func(params DeleteBanksIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation DeleteBanksID has not yet been implemented")
+		}),
+		DeleteCardsIDHandler: DeleteCardsIDHandlerFunc(func(params DeleteCardsIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation DeleteCardsID has not yet been implemented")
+		}),
 		DeleteUsersIDHandler: DeleteUsersIDHandlerFunc(func(params DeleteUsersIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation DeleteUsersID has not yet been implemented")
+		}),
+		GetBanksHandler: GetBanksHandlerFunc(func(params GetBanksParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetBanks has not yet been implemented")
+		}),
+		GetBanksIDHandler: GetBanksIDHandlerFunc(func(params GetBanksIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetBanksID has not yet been implemented")
+		}),
+		GetCardsHandler: GetCardsHandlerFunc(func(params GetCardsParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetCards has not yet been implemented")
+		}),
+		GetCardsIDHandler: GetCardsIDHandlerFunc(func(params GetCardsIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetCardsID has not yet been implemented")
 		}),
 		GetUsersHandler: GetUsersHandlerFunc(func(params GetUsersParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetUsers has not yet been implemented")
 		}),
 		GetUsersIDHandler: GetUsersIDHandlerFunc(func(params GetUsersIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetUsersID has not yet been implemented")
+		}),
+		PatchBanksHandler: PatchBanksHandlerFunc(func(params PatchBanksParams) middleware.Responder {
+			return middleware.NotImplemented("operation PatchBanks has not yet been implemented")
+		}),
+		PatchCardsHandler: PatchCardsHandlerFunc(func(params PatchCardsParams) middleware.Responder {
+			return middleware.NotImplemented("operation PatchCards has not yet been implemented")
+		}),
+		PatchUsersHandler: PatchUsersHandlerFunc(func(params PatchUsersParams) middleware.Responder {
+			return middleware.NotImplemented("operation PatchUsers has not yet been implemented")
+		}),
+		PostBanksHandler: PostBanksHandlerFunc(func(params PostBanksParams) middleware.Responder {
+			return middleware.NotImplemented("operation PostBanks has not yet been implemented")
+		}),
+		PostCardsHandler: PostCardsHandlerFunc(func(params PostCardsParams) middleware.Responder {
+			return middleware.NotImplemented("operation PostCards has not yet been implemented")
 		}),
 		PostUsersHandler: PostUsersHandlerFunc(func(params PostUsersParams) middleware.Responder {
 			return middleware.NotImplemented("operation PostUsers has not yet been implemented")
@@ -90,12 +123,34 @@ type CardProjectAPI struct {
 	//   - application/json
 	JSONProducer runtime.Producer
 
+	// DeleteBanksIDHandler sets the operation handler for the delete banks ID operation
+	DeleteBanksIDHandler DeleteBanksIDHandler
+	// DeleteCardsIDHandler sets the operation handler for the delete cards ID operation
+	DeleteCardsIDHandler DeleteCardsIDHandler
 	// DeleteUsersIDHandler sets the operation handler for the delete users ID operation
 	DeleteUsersIDHandler DeleteUsersIDHandler
+	// GetBanksHandler sets the operation handler for the get banks operation
+	GetBanksHandler GetBanksHandler
+	// GetBanksIDHandler sets the operation handler for the get banks ID operation
+	GetBanksIDHandler GetBanksIDHandler
+	// GetCardsHandler sets the operation handler for the get cards operation
+	GetCardsHandler GetCardsHandler
+	// GetCardsIDHandler sets the operation handler for the get cards ID operation
+	GetCardsIDHandler GetCardsIDHandler
 	// GetUsersHandler sets the operation handler for the get users operation
 	GetUsersHandler GetUsersHandler
 	// GetUsersIDHandler sets the operation handler for the get users ID operation
 	GetUsersIDHandler GetUsersIDHandler
+	// PatchBanksHandler sets the operation handler for the patch banks operation
+	PatchBanksHandler PatchBanksHandler
+	// PatchCardsHandler sets the operation handler for the patch cards operation
+	PatchCardsHandler PatchCardsHandler
+	// PatchUsersHandler sets the operation handler for the patch users operation
+	PatchUsersHandler PatchUsersHandler
+	// PostBanksHandler sets the operation handler for the post banks operation
+	PostBanksHandler PostBanksHandler
+	// PostCardsHandler sets the operation handler for the post cards operation
+	PostCardsHandler PostCardsHandler
 	// PostUsersHandler sets the operation handler for the post users operation
 	PostUsersHandler PostUsersHandler
 
@@ -175,14 +230,47 @@ func (o *CardProjectAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.DeleteBanksIDHandler == nil {
+		unregistered = append(unregistered, "DeleteBanksIDHandler")
+	}
+	if o.DeleteCardsIDHandler == nil {
+		unregistered = append(unregistered, "DeleteCardsIDHandler")
+	}
 	if o.DeleteUsersIDHandler == nil {
 		unregistered = append(unregistered, "DeleteUsersIDHandler")
+	}
+	if o.GetBanksHandler == nil {
+		unregistered = append(unregistered, "GetBanksHandler")
+	}
+	if o.GetBanksIDHandler == nil {
+		unregistered = append(unregistered, "GetBanksIDHandler")
+	}
+	if o.GetCardsHandler == nil {
+		unregistered = append(unregistered, "GetCardsHandler")
+	}
+	if o.GetCardsIDHandler == nil {
+		unregistered = append(unregistered, "GetCardsIDHandler")
 	}
 	if o.GetUsersHandler == nil {
 		unregistered = append(unregistered, "GetUsersHandler")
 	}
 	if o.GetUsersIDHandler == nil {
 		unregistered = append(unregistered, "GetUsersIDHandler")
+	}
+	if o.PatchBanksHandler == nil {
+		unregistered = append(unregistered, "PatchBanksHandler")
+	}
+	if o.PatchCardsHandler == nil {
+		unregistered = append(unregistered, "PatchCardsHandler")
+	}
+	if o.PatchUsersHandler == nil {
+		unregistered = append(unregistered, "PatchUsersHandler")
+	}
+	if o.PostBanksHandler == nil {
+		unregistered = append(unregistered, "PostBanksHandler")
+	}
+	if o.PostCardsHandler == nil {
+		unregistered = append(unregistered, "PostCardsHandler")
 	}
 	if o.PostUsersHandler == nil {
 		unregistered = append(unregistered, "PostUsersHandler")
@@ -278,7 +366,31 @@ func (o *CardProjectAPI) initHandlerCache() {
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
+	o.handlers["DELETE"]["/banks/{id}"] = NewDeleteBanksID(o.context, o.DeleteBanksIDHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/cards/{id}"] = NewDeleteCardsID(o.context, o.DeleteCardsIDHandler)
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
 	o.handlers["DELETE"]["/users/{id}"] = NewDeleteUsersID(o.context, o.DeleteUsersIDHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/banks"] = NewGetBanks(o.context, o.GetBanksHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/banks/{id}"] = NewGetBanksID(o.context, o.GetBanksIDHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/cards"] = NewGetCards(o.context, o.GetCardsHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/cards/{id}"] = NewGetCardsID(o.context, o.GetCardsIDHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -287,6 +399,26 @@ func (o *CardProjectAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{id}"] = NewGetUsersID(o.context, o.GetUsersIDHandler)
+	if o.handlers["PATCH"] == nil {
+		o.handlers["PATCH"] = make(map[string]http.Handler)
+	}
+	o.handlers["PATCH"]["/banks"] = NewPatchBanks(o.context, o.PatchBanksHandler)
+	if o.handlers["PATCH"] == nil {
+		o.handlers["PATCH"] = make(map[string]http.Handler)
+	}
+	o.handlers["PATCH"]["/cards"] = NewPatchCards(o.context, o.PatchCardsHandler)
+	if o.handlers["PATCH"] == nil {
+		o.handlers["PATCH"] = make(map[string]http.Handler)
+	}
+	o.handlers["PATCH"]["/users"] = NewPatchUsers(o.context, o.PatchUsersHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/banks"] = NewPostBanks(o.context, o.PostBanksHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/cards"] = NewPostCards(o.context, o.PostCardsHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
