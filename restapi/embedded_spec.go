@@ -437,20 +437,20 @@ func init() {
       "type": "object",
       "properties": {
         "BankID": {
-          "type": "string"
+          "type": "integer"
         },
         "CreateDate": {
           "type": "string",
           "format": "date-time"
         },
         "Number": {
-          "type": "string"
+          "type": "integer"
         },
         "UserID": {
-          "type": "string"
+          "type": "integer"
         },
         "id": {
-          "type": "string"
+          "type": "integer"
         }
       }
     },
@@ -485,17 +485,17 @@ func init() {
       "type": "object",
       "properties": {
         "BankID": {
-          "type": "string"
+          "type": "integer"
         },
         "CreateDate": {
           "type": "string",
           "format": "date-time"
         },
         "Number": {
-          "type": "string"
+          "type": "integer"
         },
         "UserID": {
-          "type": "string"
+          "type": "integer"
         }
       }
     },
@@ -946,20 +946,20 @@ func init() {
       "type": "object",
       "properties": {
         "BankID": {
-          "type": "string"
+          "type": "integer"
         },
         "CreateDate": {
           "type": "string",
           "format": "date-time"
         },
         "Number": {
-          "type": "string"
+          "type": "integer"
         },
         "UserID": {
-          "type": "string"
+          "type": "integer"
         },
         "id": {
-          "type": "string"
+          "type": "integer"
         }
       }
     },
@@ -1003,17 +1003,17 @@ func init() {
       "type": "object",
       "properties": {
         "BankID": {
-          "type": "string"
+          "type": "integer"
         },
         "CreateDate": {
           "type": "string",
           "format": "date-time"
         },
         "Number": {
-          "type": "string"
+          "type": "integer"
         },
         "UserID": {
-          "type": "string"
+          "type": "integer"
         }
       }
     },

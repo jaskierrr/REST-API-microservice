@@ -5,7 +5,7 @@ import (
 	"card-project/controller"
 	"card-project/database"
 	"card-project/handlers"
-	repositories "card-project/repositories/users"
+	"card-project/repositories"
 	"card-project/restapi"
 	"card-project/restapi/operations"
 	"card-project/service"
@@ -26,7 +26,8 @@ type RootBootstrapper struct {
 	Controller controller.Controller
 	Config     *config.Config
 	Handlers   handlers.Handlers
-	Repository repositories.UsersRepo
+	UserRepository repositories.UsersRepo
+	CardRepository repositories.CardsRepo
 	Service    service.Service
 }
 
@@ -80,8 +81,9 @@ func (r RootBootstrapper) RunAPI() error {
 
 	// r.registerRepositoriesAndServices(r.Infrastructure.DB)
 
-	r.Repository = repositories.NewUserRepo(r.Infrastructure.DB)
-	r.Service = service.New(r.Repository)
+	r.UserRepository = repositories.NewUserRepo(r.Infrastructure.DB)
+	r.CardRepository = repositories.NewCardRepo(r.Infrastructure.DB)
+	r.Service = service.New(r.UserRepository, r.CardRepository)
 
 	err := r.registerAPIServer(*r.Config)
 	if err != nil {

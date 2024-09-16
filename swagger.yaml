@@ -290,13 +290,13 @@ definitions:
     type: object
     properties:
       id:
-        type: string
+        type: integer
       UserID:
-        type: string
+        type: integer
       BankID:
-        type: string
+        type: integer
       Number:
-        type: string
+        type: integer
       CreateDate:
         type: string
         format: date-time
@@ -304,11 +304,11 @@ definitions:
     type: object
     properties:
       UserID:
-        type: string
+        type: integer
       BankID:
-        type: string
+        type: integer
       Number:
-        type: string
+        type: integer
       CreateDate:
         type: string
         format: date-time

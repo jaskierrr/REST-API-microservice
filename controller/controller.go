@@ -17,34 +17,15 @@ type Controller interface {
 	PostUser(ctx context.Context, user models.NewUser) (models.User, error)
 	DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error)
 	GetUsers(ctx context.Context) ([]*models.User, error)
+
+	GetCardID(ctx context.Context, id string) (models.Card, error)
+	PostCard(ctx context.Context, user models.NewCard) (models.Card, error)
+	DeleteCardID(ctx context.Context, id string) (pgconn.CommandTag, error)
+	GetCards(ctx context.Context) ([]*models.Card, error)
 }
 
 func New(service service.Service) Controller {
 	return controller{
 		service: service,
 	}
-}
-
-func (c controller) GetUserID(ctx context.Context, id string) (models.User, error) {
-	user, err := c.service.GetUserID(ctx, id)
-
-	return user, err
-}
-
-func (c controller) PostUser(ctx context.Context, userData models.NewUser) (models.User, error) {
-	user, err := c.service.PostUser(ctx, userData)
-
-	return user, err
-}
-
-func (c controller) DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error) {
-	commandTag, err := c.service.DeleteUserID(ctx, id)
-
-	return commandTag, err
-}
-
-func (c controller) GetUsers(ctx context.Context) ([]*models.User, error) {
-	user, err := c.service.GetUsers(ctx)
-
-	return user, err
 }

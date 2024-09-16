@@ -2,14 +2,15 @@ package service
 
 import (
 	"card-project/models"
-	repositories "card-project/repositories/users"
+	"card-project/repositories"
 	"context"
 
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
 type service struct {
-	repository repositories.UsersRepo
+	userRepo repositories.UsersRepo
+	cardRepo repositories.CardsRepo
 }
 
 type Service interface {
@@ -17,34 +18,16 @@ type Service interface {
 	PostUser(ctx context.Context, user models.NewUser) (models.User, error)
 	DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error)
 	GetUsers(ctx context.Context) ([]*models.User, error)
+
+	GetCardID(ctx context.Context, id string) (models.Card, error)
+	PostCard(ctx context.Context, user models.NewCard) (models.Card, error)
+	DeleteCardID(ctx context.Context, id string) (pgconn.CommandTag, error)
+	GetCards(ctx context.Context) ([]*models.Card, error)
 }
 
-func New(repository repositories.UsersRepo) Service {
+func New(userRepo repositories.UsersRepo, cardRepo repositories.CardsRepo) Service {
 	return service{
-		repository: repository,
+		userRepo: userRepo,
+		cardRepo: cardRepo,
 	}
-}
-
-func (s service) GetUserID(ctx context.Context, id string) (models.User, error) {
-	user, err := s.repository.GetUserID(ctx, id)
-
-	return user, err
-}
-
-func (s service) PostUser(ctx context.Context, userData models.NewUser) (models.User, error) {
-	user, err := s.repository.PostUser(ctx, userData)
-
-	return user, err
-}
-
-func (s service) DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error) {
-	commandTag, err := s.repository.DeleteUserID(ctx, id)
-
-	return commandTag, err
-}
-
-func (s service) GetUsers(ctx context.Context) ([]*models.User, error) {
-	user, err := s.repository.GetUsers(ctx)
-
-	return user, err
 }
