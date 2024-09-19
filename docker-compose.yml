@@ -1,16 +1,17 @@
 services:
   postgres:
+    container_name: postgres
     image: postgres:16
-    container_name: postgres16
     environment:
       POSTGRES_DB: "card-project"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: 098098
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
-      - postgers-data:/var/lib/postgresql/pgdata
+      - ./data/postgers-data:/var/lib/postgresql/pgdata
     ports:
       - "5432:5432"
+    restart: always
 
   pgadmin:
     container_name: pgadmin
@@ -23,6 +24,20 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     ports:
       - "5050:80"
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=jaskier
+      - RABBITMQ_DEFAULT_PASS=test
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
+    volumes:
+      - ./data/rabbitmq-data:/var/lib/rabbitmq
+    ports:
+      - 15672:15672
 
   card-project-api:
     container_name: card-project
@@ -39,12 +54,16 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    depends_on:
+      - postgres
+      - rabbitmq
     ports:
       - "8080:8080"
     volumes:
       - .:/app
 
   migrate:
+      container_name: migrater
       image: migrate/migrate
       depends_on:
         - postgres
