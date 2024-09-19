@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/joho/godotenv"
-	"github.com/kelseyhightower/envconfig"
+	// "github.com/kelseyhightower/envconfig"
 )
 
 type Config struct {
@@ -26,11 +26,20 @@ func NewConfig() *Config {
 		log.Println("No .env file found")
 	}
 
-	cfg := &Config{}
-
-	if err := envconfig.Process("", cfg); err != nil {
-		log.Fatal("Failed load envconfig")
+	cfg := &Config{
+		Database: Database{
+			Host: "postgres",
+			Port: "5432",
+			User: "postgres",
+			Password: "098098",
+			Name: "card-project",
+		},
+		ServerPort: 8080,
 	}
+
+	// if err := envconfig.Process("", cfg); err != nil {
+	// 	log.Fatal("Failed load envconfig " + err.Error())
+	// }
 
 	return cfg
 }

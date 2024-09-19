@@ -1,0 +1,61 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres16
+    environment:
+      POSTGRES_DB: "card-project"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: 098098
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - postgers-data:/var/lib/postgresql/pgdata
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:8.11
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "test@test.com"
+      PGADMIN_DEFAULT_PASSWORD: "test"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+
+  card-project-api:
+    container_name: card-project
+    image: card-project
+    environment:
+      - DB_Host     = "localhost"
+      - DB_Port     = "5432"
+      - DB_User     = "postgres"
+      - DB_Password = "098098"
+      - DB_Name   = "CardProject"
+      - PORT_ServerPort = "8080"
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+
+  migrate:
+      image: migrate/migrate
+
+      depends_on:
+        - postgres
+
+      volumes:
+        - C:\my\go\card-project\migrations:/database
+      # here instead of localhost as the host we use databaseservicename as that is the name we gave to the postgres service
+      command:
+        [ "-path", "/database", "-database",  "postgres://postgres:098098@postgres:5432/card-project", "up" ]
+
+volumes:
+  postgers-data:
+  pgadmin-data:
