@@ -42,15 +42,6 @@ services:
   card-project-api:
     container_name: card-project
     image: card-project
-    environment:
-      - DB_Host     = "localhost"
-      - DB_Port     = "5432"
-      - DB_User     = "postgres"
-      - DB_Password = "098098"
-      - DB_Name   = "CardProject"
-      - PORT_ServerPort = "8080"
-    env_file:
-      - .env
     build:
       context: .
       dockerfile: ./Dockerfile

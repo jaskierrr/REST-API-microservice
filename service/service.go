@@ -2,15 +2,16 @@ package service
 
 import (
 	"card-project/models"
-	"card-project/repositories"
+	cards_repo "card-project/repositories/cards"
+	users_repo "card-project/repositories/users"
 	"context"
 
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
 type service struct {
-	userRepo repositories.UsersRepo
-	cardRepo repositories.CardsRepo
+	userRepo users_repo.UsersRepo
+	cardRepo cards_repo.CardsRepo
 }
 
 type Service interface {
@@ -25,7 +26,7 @@ type Service interface {
 	GetCards(ctx context.Context) ([]*models.Card, error)
 }
 
-func New(userRepo repositories.UsersRepo, cardRepo repositories.CardsRepo) Service {
+func New(userRepo users_repo.UsersRepo, cardRepo cards_repo.CardsRepo) Service {
 	return service{
 		userRepo: userRepo,
 		cardRepo: cardRepo,

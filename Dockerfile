@@ -15,9 +15,8 @@ RUN go mod download
 COPY . .
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux go build -v -o /card-project-api ./cmd/card-project-api-server/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -v -o /card-project-api ./main.go
 
-COPY .env /
 
 # Optional:
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
