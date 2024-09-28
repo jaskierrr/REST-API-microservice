@@ -12,7 +12,10 @@ func (repo *userRepo) GetUserID(ctx context.Context, id string) (models.User, er
 		"userID": id,
 	}
 	user := models.User{}
-	err := repo.db.GetConn().QueryRow(ctx, getUserIDQuery, args).Scan(&user.ID, &user.FirstName, &user.LastName)
+	err := repo.db.
+		GetConn().
+		QueryRow(ctx, getUserIDQuery, args).
+		Scan(&user.ID, &user.FirstName, &user.LastName)
 
 	return user, err
 }

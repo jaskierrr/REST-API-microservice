@@ -22,7 +22,7 @@ func NewDB() DB {
 	return &db{}
 }
 
-func (db *db) NewConn(ctx context.Context, connConfigString string, config config.Config) DB {
+func (d *db) NewConn(ctx context.Context, connConfigString string, config config.Config) DB {
 	connString := fmt.Sprintf(connConfigString, config.Database.User, config.Database.Password, config.Database.Host, config.Database.Port, config.Database.Name)
 
 	conn, err := pgx.Connect(ctx, connString)
@@ -35,8 +35,9 @@ func (db *db) NewConn(ctx context.Context, connConfigString string, config confi
 		log.Fatalf("Failed to ping the database: %v\n", err)
 	}
 
-	db.conn = conn
-	return db
+	return &db{
+		conn: conn,
+	}
 }
 
 func (db *db) GetConn() *pgx.Conn {

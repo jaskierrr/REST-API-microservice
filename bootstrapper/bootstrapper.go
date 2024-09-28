@@ -5,6 +5,7 @@ import (
 	"card-project/controller"
 	"card-project/database"
 	"card-project/handlers"
+	"card-project/rabbitmq"
 	cards_repo "card-project/repositories/cards"
 	users_repo "card-project/repositories/users"
 	"card-project/restapi"
@@ -24,12 +25,13 @@ type RootBootstrapper struct {
 		Server *restapi.Server
 		DB     database.DB
 	}
-	Controller controller.Controller
-	Config     *config.Config
-	Handlers   handlers.Handlers
+	Controller     controller.Controller
+	Config         *config.Config
+	Handlers       handlers.Handlers
 	UserRepository users_repo.UsersRepo
 	CardRepository cards_repo.CardsRepo
-	Service    service.Service
+	RabbitMQ       rabbitmq.RabbitMQ
+	Service        service.Service
 }
 
 type RootBoot interface {
@@ -84,7 +86,11 @@ func (r RootBootstrapper) RunAPI() error {
 
 	r.UserRepository = users_repo.NewUserRepo(r.Infrastructure.DB)
 	r.CardRepository = cards_repo.NewCardRepo(r.Infrastructure.DB)
-	r.Service = service.New(r.UserRepository, r.CardRepository)
+
+	r.RabbitMQ = rabbitmq.NewRabbitMQ().NewConn()
+	go r.RabbitMQ.NewConsumer(ctx)
+
+	r.Service = service.New(r.UserRepository, r.CardRepository, r.RabbitMQ)
 
 	err := r.registerAPIServer(*r.Config)
 	if err != nil {

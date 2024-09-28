@@ -11,7 +11,9 @@ func (repo *userRepo) DeleteUserID(ctx context.Context, id string) (pgconn.Comma
 	args := pgx.NamedArgs{
 		"userID": id,
 	}
-	commandTag, err := repo.db.GetConn().Exec(ctx, deleteUserIDQuery, args)
+	commandTag, err := repo.db.
+		GetConn().
+		Exec(ctx, deleteUserIDQuery, args)
 
 	return commandTag, err
 }

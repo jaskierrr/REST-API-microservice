@@ -14,7 +14,10 @@ func (repo *cardRepo) PostCard(ctx context.Context, cardData models.NewCard) (mo
 		"bankID": cardData.BankID,
 	}
 	card := models.Card{}
-	err := repo.db.GetConn().QueryRow(ctx, postCardQuery, args).Scan(&card.ID, &card.UserID, &card.BankID, &card.Number, &card.CreateDate)
+	err := repo.db.
+		GetConn().
+		QueryRow(ctx, postCardQuery, args).
+		Scan(&card.ID, &card.UserID, &card.BankID, &card.Number, &card.CreateDate)
 
 	return card, err
 }

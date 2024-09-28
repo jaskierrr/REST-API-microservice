@@ -13,7 +13,10 @@ func (repo *userRepo) PostUser(ctx context.Context, userData models.NewUser) (mo
 		"lastName":  userData.LastName,
 	}
 	user := models.User{}
-	err := repo.db.GetConn().QueryRow(ctx, postUserQuery, args).Scan(&user.ID, &user.FirstName, &user.LastName)
+	err := repo.db.
+		GetConn().
+		QueryRow(ctx, postUserQuery, args).
+		Scan(&user.ID, &user.FirstName, &user.LastName)
 
 	return user, err
 }

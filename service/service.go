@@ -2,6 +2,7 @@ package service
 
 import (
 	"card-project/models"
+	"card-project/rabbitmq"
 	cards_repo "card-project/repositories/cards"
 	users_repo "card-project/repositories/users"
 	"context"
@@ -12,6 +13,8 @@ import (
 type service struct {
 	userRepo users_repo.UsersRepo
 	cardRepo cards_repo.CardsRepo
+
+	rabbitMQ rabbitmq.RabbitMQ
 }
 
 type Service interface {
@@ -26,9 +29,10 @@ type Service interface {
 	GetCards(ctx context.Context) ([]*models.Card, error)
 }
 
-func New(userRepo users_repo.UsersRepo, cardRepo cards_repo.CardsRepo) Service {
+func New(userRepo users_repo.UsersRepo, cardRepo cards_repo.CardsRepo, rabbitmq rabbitmq.RabbitMQ) Service {
 	return service{
 		userRepo: userRepo,
 		cardRepo: cardRepo,
+		rabbitMQ: rabbitmq,
 	}
 }

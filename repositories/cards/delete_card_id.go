@@ -11,7 +11,9 @@ func (repo *cardRepo) DeleteCardID(ctx context.Context, id string) (pgconn.Comma
 	args := pgx.NamedArgs{
 		"cardID": id,
 	}
-	commandTag, err := repo.db.GetConn().Exec(ctx, deleteCardIDQuery, args)
+	commandTag, err := repo.db.
+		GetConn().
+		Exec(ctx, deleteCardIDQuery, args)
 
 	return commandTag, err
 }
