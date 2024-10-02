@@ -5,7 +5,7 @@ import (
 	"card-project/controller"
 	"card-project/database"
 	"card-project/handlers"
-	"card-project/rabbitmq"
+	"card-project/repositories/rabbitmq"
 	cards_repo "card-project/repositories/cards"
 	users_repo "card-project/repositories/users"
 	"card-project/restapi"

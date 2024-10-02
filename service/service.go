@@ -2,7 +2,7 @@ package service
 
 import (
 	"card-project/models"
-	"card-project/rabbitmq"
+	"card-project/repositories/rabbitmq"
 	cards_repo "card-project/repositories/cards"
 	users_repo "card-project/repositories/users"
 	"context"

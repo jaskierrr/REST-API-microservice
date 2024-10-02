@@ -477,7 +477,8 @@ func init() {
       "type": "object",
       "properties": {
         "Name": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -485,17 +486,21 @@ func init() {
       "type": "object",
       "properties": {
         "BankID": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "CreateDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "Number": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "UserID": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -503,10 +508,12 @@ func init() {
       "type": "object",
       "properties": {
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -995,7 +1002,8 @@ func init() {
       "type": "object",
       "properties": {
         "Name": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -1003,17 +1011,21 @@ func init() {
       "type": "object",
       "properties": {
         "BankID": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "CreateDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "Number": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "UserID": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -1021,10 +1033,12 @@ func init() {
       "type": "object",
       "properties": {
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },

@@ -20,17 +20,17 @@ import (
 type NewCard struct {
 
 	// bank ID
-	BankID int64 `json:"BankID,omitempty"`
+	BankID int64 `json:"BankID,omitempty" validate:"required"`
 
 	// create date
 	// Format: date-time
-	CreateDate strfmt.DateTime `json:"CreateDate,omitempty"`
+	CreateDate strfmt.DateTime `json:"CreateDate,omitempty" validate:"required"`
 
 	// number
-	Number int64 `json:"Number,omitempty"`
+	Number int64 `json:"Number,omitempty" validate:"required"`
 
 	// user ID
-	UserID int64 `json:"UserID,omitempty"`
+	UserID int64 `json:"UserID,omitempty" validate:"required"`
 }
 
 // Validate validates this new card
