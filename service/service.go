@@ -18,14 +18,14 @@ type service struct {
 }
 
 type Service interface {
-	GetUserID(ctx context.Context, id string) (models.User, error)
+	GetUserID(ctx context.Context, id int) (models.User, error)
 	PostUser(ctx context.Context, user models.NewUser) (models.User, error)
-	DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error)
+	DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error)
 	GetUsers(ctx context.Context) ([]*models.User, error)
 
-	GetCardID(ctx context.Context, id string) (models.Card, error)
+	GetCardID(ctx context.Context, id int) (models.Card, error)
 	PostCard(ctx context.Context, user models.NewCard) (models.Card, error)
-	DeleteCardID(ctx context.Context, id string) (pgconn.CommandTag, error)
+	DeleteCardID(ctx context.Context, id int) (pgconn.CommandTag, error)
 	GetCards(ctx context.Context) ([]*models.Card, error)
 }
 

@@ -21,7 +21,7 @@ type Bank struct {
 	Name string `json:"Name,omitempty"`
 
 	// id
-	ID string `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 }
 
 // Validate validates this bank

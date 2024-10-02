@@ -5,11 +5,14 @@ import (
 	"card-project/restapi/operations"
 
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-playground/validator/v10"
 )
 
 type handlers struct {
 	controller controller.Controller
 }
+
+var validate *validator.Validate
 
 type Handlers interface {
 	GetUsersID(params operations.GetUsersIDParams) middleware.Responder
@@ -26,7 +29,8 @@ type Handlers interface {
 	Link(api *operations.CardProjectAPI)
 }
 
-func New(controller controller.Controller) Handlers {
+func New(controller controller.Controller, validator *validator.Validate) Handlers {
+	validate = validator
 	return &handlers{
 		controller: controller,
 	}

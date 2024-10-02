@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/go-openapi/loads"
+	"github.com/go-playground/validator/v10"
 )
 
 const connConfigString = "postgres://%s:%s@%s:%s/%s"
@@ -33,6 +34,8 @@ type RootBootstrapper struct {
 	CardRepository cards_repo.CardsRepo
 	RabbitMQ       rabbitmq.RabbitMQ
 	Service        service.Service
+
+	Validator *validator.Validate
 }
 
 type RootBoot interface {
@@ -56,8 +59,9 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 	api := operations.NewCardProjectAPI(swaggerSpec)
 
 	r.Controller = controller.New(r.Service)
+	r.Validator = validator.New(validator.WithRequiredStructEnabled())
 
-	r.Handlers = handlers.New(r.Controller)
+	r.Handlers = handlers.New(r.Controller, r.Validator)
 	r.Handlers.Link(api)
 	if r.Handlers == nil {
 		log.Fatal("handlers initialization failed")

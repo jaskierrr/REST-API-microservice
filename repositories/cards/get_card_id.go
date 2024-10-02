@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (repo *cardRepo) GetCardID(ctx context.Context, id string) (models.Card, error) {
+func (repo *cardRepo) GetCardID(ctx context.Context, id int) (models.Card, error) {
 	args := pgx.NamedArgs{
 		"cardID": id,
 	}

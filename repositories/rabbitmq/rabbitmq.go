@@ -5,6 +5,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/jackc/pgx/v5/pgconn"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -17,12 +18,13 @@ type rabbitMQ struct {
 
 type userRepo interface {
 	PostUser(ctx context.Context, userData models.NewUser) (models.User, error)
+	DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error)
 }
 
 type RabbitMQ interface {
 	NewConn(userRepo userRepo) RabbitMQ
 	ProduceUsersPOST(ctx context.Context, userData models.NewUser)
-	ProduceUsersDELETE(ctx context.Context, id string)
+	ProduceUsersDELETE(ctx context.Context, id int)
 	NewConsumer(ctx context.Context)
 }
 

@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func (c controller) GetUserID(ctx context.Context, id string) (models.User, error) {
+func (c controller) GetUserID(ctx context.Context, id int) (models.User, error) {
 	user, err := c.service.GetUserID(ctx, id)
 	return user, err
 }
@@ -17,7 +17,7 @@ func (c controller) PostUser(ctx context.Context, userData models.NewUser) (mode
 	return user, err
 }
 
-func (c controller) DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error) {
+func (c controller) DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error) {
 	commandTag, err := c.service.DeleteUserID(ctx, id)
 	return commandTag, err
 }

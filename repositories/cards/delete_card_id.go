@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func (repo *cardRepo) DeleteCardID(ctx context.Context, id string) (pgconn.CommandTag, error) {
+func (repo *cardRepo) DeleteCardID(ctx context.Context, id int) (pgconn.CommandTag, error) {
 	args := pgx.NamedArgs{
 		"cardID": id,
 	}

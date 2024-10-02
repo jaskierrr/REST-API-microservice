@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func (c controller) GetCardID(ctx context.Context, id string) (models.Card, error) {
+func (c controller) GetCardID(ctx context.Context, id int) (models.Card, error) {
 	card, err := c.service.GetCardID(ctx, id)
 	return card, err
 }
@@ -17,7 +17,7 @@ func (c controller) PostCard(ctx context.Context, cardData models.NewCard) (mode
 	return card, err
 }
 
-func (c controller) DeleteCardID(ctx context.Context, id string) (pgconn.CommandTag, error) {
+func (c controller) DeleteCardID(ctx context.Context, id int) (pgconn.CommandTag, error) {
 	commandTag, err := c.service.DeleteCardID(ctx, id)
 	return commandTag, err
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func (s service) GetUserID(ctx context.Context, id string) (models.User, error) {
+func (s service) GetUserID(ctx context.Context, id int) (models.User, error) {
 	user, err := s.userRepo.GetUserID(ctx, id)
 
 	return user, err
@@ -21,7 +21,7 @@ func (s service) PostUser(ctx context.Context, userData models.NewUser) (models.
 	return models.User{}, nil
 }
 
-func (s service) DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error) {
+func (s service) DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error) {
 	s.rabbitMQ.ProduceUsersDELETE(ctx, id)
 
 	// commandTag, err := s.userRepo.DeleteUserID(ctx, id)

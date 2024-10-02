@@ -20,9 +20,9 @@ type userRepo struct {
 }
 
 type UsersRepo interface {
-	GetUserID(ctx context.Context, id string) (models.User, error)
+	GetUserID(ctx context.Context, id int) (models.User, error)
 	PostUser(ctx context.Context, user models.NewUser) (models.User, error)
-	DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error)
+	DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error)
 	GetUsers(ctx context.Context) ([]*models.User, error)
 }
 

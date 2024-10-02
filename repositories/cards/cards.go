@@ -20,9 +20,9 @@ type cardRepo struct {
 }
 
 type CardsRepo interface {
-	GetCardID(ctx context.Context, id string) (models.Card, error)
+	GetCardID(ctx context.Context, id int) (models.Card, error)
 	PostCard(ctx context.Context, card models.NewCard) (models.Card, error)
-	DeleteCardID(ctx context.Context, id string) (pgconn.CommandTag, error)
+	DeleteCardID(ctx context.Context, id int) (pgconn.CommandTag, error)
 	GetCards(ctx context.Context) ([]*models.Card, error)
 }
 

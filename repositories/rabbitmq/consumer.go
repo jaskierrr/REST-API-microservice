@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"strconv"
 )
 
 func (r *rabbitMQ) NewConsumer(ctx context.Context) {
@@ -46,7 +47,6 @@ func (r *rabbitMQ) NewConsumer(ctx context.Context) {
 					}
 
 					_, err = r.userRepo.PostUser(ctx, userData)
-
 					if err != nil {
 						log.Printf("Error post user from consumer: %v", err)
 						continue
@@ -55,6 +55,13 @@ func (r *rabbitMQ) NewConsumer(ctx context.Context) {
 				}
 			case msg.Headers["method"] == "DELETE":
 				{
+					body, _ := strconv.Atoi(string(msg.Body))
+
+					_, err = r.userRepo.DeleteUserID(ctx, body)
+					if err != nil {
+						log.Printf("Error delete user from consumer: %v", err)
+						continue
+					}
 					// fmt.Println(msg.Headers["method"])
 					// fmt.Println(string(msg.Body))
 				}

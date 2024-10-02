@@ -2,13 +2,13 @@ package rabbitmq
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"strconv"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func (r *rabbitMQ) ProduceUsersDELETE(ctx context.Context, id string) {
+func (r *rabbitMQ) ProduceUsersDELETE(ctx context.Context, id int) {
 	queue, err := r.channel.QueueDeclare(
 		"test", // name
 		false,  // durable
@@ -33,12 +33,10 @@ func (r *rabbitMQ) ProduceUsersDELETE(ctx context.Context, id string) {
 		amqp.Publishing{
 			Headers:     headers,
 			ContentType: "text/plain",
-			Body:        []byte(id),
+			Body:        []byte(strconv.Itoa(id)),
 		},
 	)
 	if err != nil {
 		log.Fatalf("Failed to publish data in rabbitmq: %v\n", err)
 	}
-
-	fmt.Println("Data for DELETE user was publish in rabbitmq")
 }

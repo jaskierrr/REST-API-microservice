@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (repo *userRepo) GetUserID(ctx context.Context, id string) (models.User, error) {
+func (repo *userRepo) GetUserID(ctx context.Context, id int) (models.User, error) {
 	args := pgx.NamedArgs{
 		"userID": id,
 	}

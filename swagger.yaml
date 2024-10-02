@@ -65,7 +65,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         200:
           description: "Ok"
@@ -83,7 +83,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         204:
           description: "User deleted"
@@ -148,7 +148,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         200:
           description: "Ok"
@@ -166,7 +166,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         204:
           description: "Card deleted"
@@ -231,7 +231,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         200:
           description: "Ok"
@@ -249,7 +249,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         204:
           description: "Bank deleted"
@@ -262,7 +262,7 @@ definitions:
     type: object
     properties:
       id:
-        type: string
+        type: integer
       firstName:
         type: string
       lastName:
@@ -280,7 +280,7 @@ definitions:
     type: object
     properties:
       id:
-        type: string
+        type: integer
       Name:
         type: string
   NewBank:
