@@ -13,6 +13,7 @@ import (
 	"card-project/service"
 	"context"
 	"log"
+	"time"
 
 	"github.com/go-openapi/loads"
 )
@@ -86,8 +87,8 @@ func (r RootBootstrapper) RunAPI() error {
 
 	r.UserRepository = users_repo.NewUserRepo(r.Infrastructure.DB)
 	r.CardRepository = cards_repo.NewCardRepo(r.Infrastructure.DB)
-
-	r.RabbitMQ = rabbitmq.NewRabbitMQ().NewConn()
+	r.RabbitMQ = rabbitmq.NewRabbitMQ().NewConn(r.UserRepository)
+	time.Sleep(time.Second * 5)
 	go r.RabbitMQ.NewConsumer(ctx)
 
 	r.Service = service.New(r.UserRepository, r.CardRepository, r.RabbitMQ)

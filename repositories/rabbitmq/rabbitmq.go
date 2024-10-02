@@ -11,10 +11,16 @@ import (
 type rabbitMQ struct {
 	conn    *amqp.Connection
 	channel *amqp.Channel
+
+	userRepo userRepo
+}
+
+type userRepo interface {
+	PostUser(ctx context.Context, userData models.NewUser) (models.User, error)
 }
 
 type RabbitMQ interface {
-	NewConn() RabbitMQ
+	NewConn(userRepo userRepo) RabbitMQ
 	ProduceUsersPOST(ctx context.Context, userData models.NewUser)
 	ProduceUsersDELETE(ctx context.Context, id string)
 	NewConsumer(ctx context.Context)
@@ -24,7 +30,8 @@ func NewRabbitMQ() RabbitMQ {
 	return &rabbitMQ{}
 }
 
-func (r *rabbitMQ) NewConn() RabbitMQ {
+func (r *rabbitMQ) NewConn(userRepo userRepo) RabbitMQ {
+
 	conn, err := amqp.Dial("amqp://jaskier:test@rabbitmq:5672/")
 	if err != nil {
 		log.Fatalf("Unable to connect to rabbitmq: %v\n", err)
@@ -36,8 +43,9 @@ func (r *rabbitMQ) NewConn() RabbitMQ {
 	}
 
 	return &rabbitMQ{
-		conn:    conn,
-		channel: channel,
+		conn:     conn,
+		channel:  channel,
+		userRepo: userRepo,
 	}
 
 }

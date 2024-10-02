@@ -4,7 +4,6 @@ import (
 	"card-project/models"
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 )
 
@@ -39,19 +38,25 @@ func (r *rabbitMQ) NewConsumer(ctx context.Context) {
 			switch {
 			case msg.Headers["method"] == "POST":
 				{
-					user := models.NewUser{}
-					err := json.Unmarshal(msg.Body, &user)
+					userData := models.NewUser{}
+					err := json.Unmarshal(msg.Body, &userData)
 					if err != nil {
 						log.Printf("Error unmarshaling message: %v", err)
 						continue
 					}
-					fmt.Println(msg.Headers["method"])
-					fmt.Println(user)
+
+					_, err = r.userRepo.PostUser(ctx, userData)
+
+					if err != nil {
+						log.Printf("Error post user from consumer: %v", err)
+						continue
+					}
+
 				}
 			case msg.Headers["method"] == "DELETE":
 				{
-					fmt.Println(msg.Headers["method"])
-					fmt.Println(string(msg.Body))
+					// fmt.Println(msg.Headers["method"])
+					// fmt.Println(string(msg.Body))
 				}
 			}
 		}
