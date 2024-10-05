@@ -24,7 +24,7 @@ type NewCard struct {
 
 	// create date
 	// Format: date-time
-	CreateDate strfmt.DateTime `json:"CreateDate,omitempty" validate:"required"`
+	CreateDate strfmt.DateTime `json:"CreateDate,omitempty"`
 
 	// number
 	Number int64 `json:"Number,omitempty" validate:"required"`

@@ -8,7 +8,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func (r *rabbitMQ) ProduceDeleteUser(ctx context.Context, id int) {
+func (r *rabbitMQ) ProduceDeleteCard(ctx context.Context, id int) {
 	queue, err := r.channel.QueueDeclare(
 		"test", // name
 		false,  // durable

@@ -62,6 +62,16 @@ func (h *handlers) DeleteCardsID(params operations.DeleteCardsIDParams) middlewa
 }
 
 func (h *handlers) PostCards(params operations.PostCardsParams) middleware.Responder {
+	err := validate.Struct(params.Card)
+	if err != nil {
+		return operations.NewGetCardsIDDefault(500).WithPayload(&models.ErrorResponse{
+			Error: &models.ErrorResponseAO0Error{
+				Message: "Failed to POST Card in storage " + err.Error(),
+			},
+		})
+	}
+
+
 	ctx := params.HTTPRequest.Context()
 	card, err := h.controller.PostCard(ctx, *params.Card)
 

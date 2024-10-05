@@ -318,7 +318,6 @@ definitions:
       CreateDate:
         type: string
         format: date-time
-        x-go-custom-tag: "validate:\"required\""
   ErrorResponse:
     title: ErrorResponse
     description: Общая ошибка

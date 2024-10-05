@@ -24,7 +24,13 @@ func (h *handlers) GetUsers(params operations.GetUsersParams) middleware.Respond
 }
 
 func (h *handlers) GetUsersID(params operations.GetUsersIDParams) middleware.Responder {
-	// т.к. id передается в роуте, то и валидатор использовать нет смысла
+	if params.ID == 0 {
+		return operations.NewGetUsersIDDefault(404).WithPayload(&models.ErrorResponse{
+			Error: &models.ErrorResponseAO0Error{
+				Message: "Failed to GET User in storage, user id = 0",
+			},
+		})
+	}
 
 	ctx := params.HTTPRequest.Context()
 	user, err := h.controller.GetUserID(ctx, int(params.ID))
@@ -41,6 +47,14 @@ func (h *handlers) GetUsersID(params operations.GetUsersIDParams) middleware.Res
 }
 
 func (h *handlers) DeleteUsersID(params operations.DeleteUsersIDParams) middleware.Responder {
+	if params.ID == 0 {
+		return operations.NewDeleteUsersIDDefault(404).WithPayload(&models.ErrorResponse{
+			Error: &models.ErrorResponseAO0Error{
+				Message: "Failed to DELETE User in storage, user id = 0",
+			},
+		})
+	}
+
 	ctx := params.HTTPRequest.Context()
 	_, err := h.controller.DeleteUserID(ctx, int(params.ID))
 

@@ -9,7 +9,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func (r *rabbitMQ) ProduceUsersPOST(ctx context.Context, userData models.NewUser) {
+func (r *rabbitMQ) ProducePostUser(ctx context.Context, userData models.NewUser) {
 	queue, err := r.channel.QueueDeclare(
 		"test", // name
 		false,  // durable

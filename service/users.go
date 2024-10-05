@@ -14,7 +14,7 @@ func (s service) GetUserID(ctx context.Context, id int) (models.User, error) {
 }
 
 func (s service) PostUser(ctx context.Context, userData models.NewUser) (models.User, error) {
-	s.rabbitMQ.ProduceUsersPOST(ctx, userData)
+	s.rabbitMQ.ProducePostUser(ctx, userData)
 
 	// user, err := s.userRepo.PostUser(ctx, userData)
 
@@ -22,7 +22,7 @@ func (s service) PostUser(ctx context.Context, userData models.NewUser) (models.
 }
 
 func (s service) DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error) {
-	s.rabbitMQ.ProduceUsersDELETE(ctx, id)
+	s.rabbitMQ.ProduceDeleteUser(ctx, id)
 
 	// commandTag, err := s.userRepo.DeleteUserID(ctx, id)
 

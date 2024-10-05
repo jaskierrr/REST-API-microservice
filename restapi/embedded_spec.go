@@ -491,8 +491,7 @@ func init() {
         },
         "CreateDate": {
           "type": "string",
-          "format": "date-time",
-          "x-go-custom-tag": "validate:\"required\""
+          "format": "date-time"
         },
         "Number": {
           "type": "integer",
@@ -1016,8 +1015,7 @@ func init() {
         },
         "CreateDate": {
           "type": "string",
-          "format": "date-time",
-          "x-go-custom-tag": "validate:\"required\""
+          "format": "date-time"
         },
         "Number": {
           "type": "integer",

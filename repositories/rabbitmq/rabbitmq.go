@@ -23,8 +23,10 @@ type userRepo interface {
 
 type RabbitMQ interface {
 	NewConn(userRepo userRepo) RabbitMQ
-	ProduceUsersPOST(ctx context.Context, userData models.NewUser)
-	ProduceUsersDELETE(ctx context.Context, id int)
+	ProducePostUser(ctx context.Context, userData models.NewUser)
+	ProduceDeleteUser(ctx context.Context, id int)
+	ProducePostCard(ctx context.Context, userData models.NewCard)
+	ProduceDeleteCard(ctx context.Context, id int)
 	NewConsumer(ctx context.Context)
 }
 
