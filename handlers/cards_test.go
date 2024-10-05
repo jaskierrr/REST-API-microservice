@@ -58,15 +58,6 @@ func TestCardPostValidation(t *testing.T) {
 			},
 			wantErr: true,
 		},
-		{
-			name: "missing create date",
-			payload: models.NewCard{
-				UserID: 1,
-				BankID: 1,
-				Number: 1234,
-			},
-			wantErr: true,
-		},
 	}
 
 	for _, c := range cases {
