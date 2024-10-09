@@ -1,3 +1,4 @@
+//go:generate mockgen -source=./service.go -destination=../mocks/service_mock.go -package=mock
 package service
 
 import (
@@ -7,7 +8,6 @@ import (
 	users_repo "card-project/repositories/users"
 	"context"
 
-	"github.com/jackc/pgx/v5/pgconn"
 )
 
 type service struct {
@@ -20,12 +20,12 @@ type service struct {
 type Service interface {
 	GetUserID(ctx context.Context, id int) (models.User, error)
 	PostUser(ctx context.Context, user models.NewUser) (models.User, error)
-	DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error)
+	DeleteUserID(ctx context.Context, id int) error
 	GetUsers(ctx context.Context) ([]*models.User, error)
 
 	GetCardID(ctx context.Context, id int) (models.Card, error)
 	PostCard(ctx context.Context, user models.NewCard) (models.Card, error)
-	DeleteCardID(ctx context.Context, id int) (pgconn.CommandTag, error)
+	DeleteCardID(ctx context.Context, id int) error
 	GetCards(ctx context.Context) ([]*models.Card, error)
 }
 

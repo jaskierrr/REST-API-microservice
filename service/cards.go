@@ -3,8 +3,10 @@ package service
 import (
 	"card-project/models"
 	"context"
+	"time"
 
-	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/go-openapi/strfmt"
+	"github.com/google/uuid"
 )
 
 func (s service) GetCardID(ctx context.Context, id int) (models.Card, error) {
@@ -14,19 +16,25 @@ func (s service) GetCardID(ctx context.Context, id int) (models.Card, error) {
 }
 
 func (s service) PostCard(ctx context.Context, cardData models.NewCard) (models.Card, error) {
-	s.rabbitMQ.ProducePostCard(ctx, cardData)
+	id, _ := uuid.NewUUID()
 
-	// card, err := s.cardRepo.PostCard(ctx, cardData)
+	card := models.Card{
+		ID:         int64(id.ID()),
+		UserID:     cardData.UserID,
+		BankID:     cardData.BankID,
+		Number:     cardData.Number,
+		CreateDate: strfmt.DateTime(time.Now()),
+	}
 
-	return models.Card{}, nil
+	err := s.rabbitMQ.ProducePostCard(ctx, card)
+
+	return card, err
 }
 
-func (s service) DeleteCardID(ctx context.Context, id int) (pgconn.CommandTag, error) {
-	s.rabbitMQ.ProduceDeleteCard(ctx, id)
+func (s service) DeleteCardID(ctx context.Context, id int) error {
+	err := s.rabbitMQ.ProduceDeleteCard(ctx, id)
 
-	// commandTag, err := s.cardRepo.DeleteCardID(ctx, id)
-
-	return pgconn.CommandTag{}, nil
+	return err
 }
 
 func (s service) GetCards(ctx context.Context) ([]*models.Card, error) {

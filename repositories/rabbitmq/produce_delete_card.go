@@ -2,13 +2,12 @@ package rabbitmq
 
 import (
 	"context"
-	"log"
 	"strconv"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func (r *rabbitMQ) ProduceDeleteCard(ctx context.Context, id int) {
+func (r *rabbitMQ) ProduceDeleteCard(ctx context.Context, id int) error {
 	queue, err := r.channel.QueueDeclare(
 		"test", // name
 		false,  // durable
@@ -18,11 +17,13 @@ func (r *rabbitMQ) ProduceDeleteCard(ctx context.Context, id int) {
 		nil,    // arguments
 	)
 	if err != nil {
-		log.Fatalf("Failed to declare a queue in rabbitmq: %v\n", err)
+		// log.Printf("Failed to declare a queue in rabbitmq: %v\n", err)
+		return err
 	}
 
 	headers := make(amqp.Table)
-	headers["method"] = "DELETE"
+	headers[headersMethod] = "DELETE"
+	headers[headersItem] = "card"
 
 	err = r.channel.PublishWithContext(
 		ctx,
@@ -37,6 +38,9 @@ func (r *rabbitMQ) ProduceDeleteCard(ctx context.Context, id int) {
 		},
 	)
 	if err != nil {
-		log.Fatalf("Failed to publish data in rabbitmq: %v\n", err)
+		// log.Printf("Failed to publish data in rabbitmq: %v\n", err)
+		return err
 	}
+
+	return nil
 }

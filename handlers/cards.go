@@ -40,15 +40,7 @@ func (h *handlers) GetCardsID(params operations.GetCardsIDParams) middleware.Res
 
 func (h *handlers) DeleteCardsID(params operations.DeleteCardsIDParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
-	commandTag, err := h.controller.DeleteCardID(ctx, int(params.ID))
-
-	if commandTag.RowsAffected() == 0 {
-		return operations.NewDeleteCardsIDDefault(404).WithPayload(&models.ErrorResponse{
-			Error: &models.ErrorResponseAO0Error{
-				Message: "card not found, card id: " + strconv.FormatInt(params.ID, 10) + " " + err.Error(),
-			},
-		})
-	}
+	err := h.controller.DeleteCardID(ctx, int(params.ID))
 
 	if err != nil {
 		return operations.NewDeleteCardsIDDefault(500).WithPayload(&models.ErrorResponse{

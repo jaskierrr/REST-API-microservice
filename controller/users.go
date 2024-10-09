@@ -4,7 +4,6 @@ import (
 	"card-project/models"
 	"context"
 
-	"github.com/jackc/pgx/v5/pgconn"
 )
 
 func (c controller) GetUserID(ctx context.Context, id int) (models.User, error) {
@@ -17,9 +16,9 @@ func (c controller) PostUser(ctx context.Context, userData models.NewUser) (mode
 	return user, err
 }
 
-func (c controller) DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error) {
-	commandTag, err := c.service.DeleteUserID(ctx, id)
-	return commandTag, err
+func (c controller) DeleteUserID(ctx context.Context, id int) error {
+	err := c.service.DeleteUserID(ctx, id)
+	return err
 }
 
 func (c controller) GetUsers(ctx context.Context) ([]*models.User, error) {

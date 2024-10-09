@@ -16,13 +16,10 @@ import (
 //
 // swagger:model User
 type User struct {
-
-	// first name
-	FirstName string `json:"firstName,omitempty"`
-
 	// id
 	ID int64 `json:"id,omitempty"`
-
+	// first name
+	FirstName string `json:"firstName,omitempty"`
 	// last name
 	LastName string `json:"lastName,omitempty"`
 }

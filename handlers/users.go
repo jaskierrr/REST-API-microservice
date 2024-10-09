@@ -56,15 +56,7 @@ func (h *handlers) DeleteUsersID(params operations.DeleteUsersIDParams) middlewa
 	}
 
 	ctx := params.HTTPRequest.Context()
-	_, err := h.controller.DeleteUserID(ctx, int(params.ID))
-
-	// if commandTag.RowsAffected() == 0 {
-	// 	return operations.NewDeleteUsersIDDefault(404).WithPayload(&models.ErrorResponse{
-	// 		Error: &models.ErrorResponseAO0Error{
-	// 			Message: "user not found, user id: " + params.ID + " " + err.Error(),
-	// 		},
-	// 	})
-	// }
+	err := h.controller.DeleteUserID(ctx, int(params.ID))
 
 	if err != nil {
 		return operations.NewDeleteUsersIDDefault(500).WithPayload(&models.ErrorResponse{

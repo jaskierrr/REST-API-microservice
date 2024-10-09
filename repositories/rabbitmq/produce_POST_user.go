@@ -4,12 +4,11 @@ import (
 	"card-project/models"
 	"context"
 	"encoding/json"
-	"log"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func (r *rabbitMQ) ProducePostUser(ctx context.Context, userData models.NewUser) {
+func (r *rabbitMQ) ProducePostUser(ctx context.Context, userData models.User) error {
 	queue, err := r.channel.QueueDeclare(
 		"test", // name
 		false,  // durable
@@ -19,16 +18,19 @@ func (r *rabbitMQ) ProducePostUser(ctx context.Context, userData models.NewUser)
 		nil,    // arguments
 	)
 	if err != nil {
-		log.Fatalf("Failed to declare a queue in rabbitmq: %v\n", err)
+		// log.Printf("Failed to declare a queue in rabbitmq: %v\n", err)
+		return err
 	}
 
 	body, err := json.Marshal(userData)
 	if err != nil {
-		log.Fatalf("Failed to marshal userData in json: %v\n", err)
+		// log.Printf("Failed to marshal userData in json: %v\n", err)
+		return err
 	}
 
 	headers := make(amqp.Table)
-	headers["method"] = "POST"
+	headers[headersMethod] = "POST"
+	headers[headersItem] = "user"
 
 	err = r.channel.PublishWithContext(
 		ctx,
@@ -43,7 +45,9 @@ func (r *rabbitMQ) ProducePostUser(ctx context.Context, userData models.NewUser)
 		},
 	)
 	if err != nil {
-		log.Fatalf("Failed to publish data in rabbitmq: %v\n", err)
+		// log.Printf("Failed to publish data in rabbitmq: %v\n", err)
+		return err
 	}
 
+	return nil
 }

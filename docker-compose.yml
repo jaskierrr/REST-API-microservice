@@ -30,6 +30,11 @@ services:
     container_name: rabbitmq
     image: rabbitmq:3.10.7-management
     hostname: rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 30s
+      timeout: 30s
+      retries: 10
     restart: always
     environment:
       - RABBITMQ_DEFAULT_USER=jaskier
@@ -43,6 +48,12 @@ services:
   card-project-api:
     container_name: card-project
     image: card-project
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 15
+        window: 20s
+
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -55,14 +66,13 @@ services:
       - .:/app
 
   migrate:
-      container_name: migrater
-      image: migrate/migrate
-      depends_on:
-        - postgres
-      volumes:
-        - C:\my\go\card-project\migrations:/database
-      command:
-        [ "-path", "/database", "-database",  "postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable", "up" ]
+    container_name: migrater
+    image: migrate/migrate
+    depends_on:
+      - postgres
+    volumes:
+      - C:\my\go\card-project\migrations:/database
+    command: [ "-path", "/database", "-database", "postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable", "up" ]
 
 volumes:
   postgers-data:

@@ -16,12 +16,10 @@ import (
 //
 // swagger:model Bank
 type Bank struct {
-
+  // id
+	ID int64 `json:"id,omitempty"`
 	// name
 	Name string `json:"Name,omitempty"`
-
-	// id
-	ID int64 `json:"id,omitempty"`
 }
 
 // Validate validates this bank

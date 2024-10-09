@@ -1,3 +1,4 @@
+//go:generate mockgen -source=./rabbitmq.go -destination=../../mocks/rabbitmq_mock.go -package=mock
 package rabbitmq
 
 import (
@@ -9,32 +10,48 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
+const (
+	headersMethod = "method"
+	headersItem   = "item"
+)
+
 type rabbitMQ struct {
 	conn    *amqp.Connection
 	channel *amqp.Channel
 
 	userRepo userRepo
+	cardRepo cardRepo
 }
 
 type userRepo interface {
-	PostUser(ctx context.Context, userData models.NewUser) (models.User, error)
+	PostUser(ctx context.Context, userData models.User) (models.User, error)
 	DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error)
 }
 
+type cardRepo interface {
+	PostCard(ctx context.Context, cardData models.Card) (models.Card, error)
+	DeleteCardID(ctx context.Context, id int) (pgconn.CommandTag, error)
+}
+
 type RabbitMQ interface {
-	NewConn(userRepo userRepo) RabbitMQ
-	ProducePostUser(ctx context.Context, userData models.NewUser)
-	ProduceDeleteUser(ctx context.Context, id int)
-	ProducePostCard(ctx context.Context, userData models.NewCard)
-	ProduceDeleteCard(ctx context.Context, id int)
+	NewConn(userRepo userRepo, cardRepo cardRepo) RabbitMQ
+	ProducePostUser(ctx context.Context, userData models.User) error
+	ProduceDeleteUser(ctx context.Context, id int) error
+	ProducePostCard(ctx context.Context, cardData models.Card) error
+	ProduceDeleteCard(ctx context.Context, id int) error
+
 	NewConsumer(ctx context.Context)
+	consumeUserPost(ctx context.Context, msg amqp.Delivery)
+	consumeUserDelete(ctx context.Context, msg amqp.Delivery)
+	consumeCardPost(ctx context.Context, msg amqp.Delivery)
+	consumeCardDelete(ctx context.Context, msg amqp.Delivery)
 }
 
 func NewRabbitMQ() RabbitMQ {
 	return &rabbitMQ{}
 }
 
-func (r *rabbitMQ) NewConn(userRepo userRepo) RabbitMQ {
+func (r *rabbitMQ) NewConn(userRepo userRepo, cardRepo cardRepo) RabbitMQ {
 
 	conn, err := amqp.Dial("amqp://jaskier:test@rabbitmq:5672/")
 	if err != nil {
@@ -50,6 +67,7 @@ func (r *rabbitMQ) NewConn(userRepo userRepo) RabbitMQ {
 		conn:     conn,
 		channel:  channel,
 		userRepo: userRepo,
+		cardRepo: cardRepo,
 	}
 
 }

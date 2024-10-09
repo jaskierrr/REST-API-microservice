@@ -1,11 +1,8 @@
 package rabbitmq
 
 import (
-	"card-project/models"
 	"context"
-	"encoding/json"
 	"log"
-	"strconv"
 )
 
 func (r *rabbitMQ) NewConsumer(ctx context.Context) {
@@ -37,33 +34,31 @@ func (r *rabbitMQ) NewConsumer(ctx context.Context) {
 	go func() {
 		for msg := range msgs {
 			switch {
-			case msg.Headers["method"] == "POST":
+			case msg.Headers[headersItem] == "user":
 				{
-					userData := models.NewUser{}
-					err := json.Unmarshal(msg.Body, &userData)
-					if err != nil {
-						log.Printf("Error unmarshaling message: %v", err)
-						continue
+					switch {
+					case msg.Headers[headersMethod] == "POST":
+						{
+							r.consumeUserPost(ctx, msg)
+						}
+					case msg.Headers[headersMethod] == "DELETE":
+						{
+							r.consumeUserDelete(ctx, msg)
+						}
 					}
-
-					_, err = r.userRepo.PostUser(ctx, userData)
-					if err != nil {
-						log.Printf("Error post user from consumer: %v", err)
-						continue
-					}
-
 				}
-			case msg.Headers["method"] == "DELETE":
+			case msg.Headers[headersItem] == "card":
 				{
-					body, _ := strconv.Atoi(string(msg.Body))
-
-					_, err = r.userRepo.DeleteUserID(ctx, body)
-					if err != nil {
-						log.Printf("Error delete user from consumer: %v", err)
-						continue
+					switch {
+					case msg.Headers[headersMethod] == "POST":
+						{
+							r.consumeCardPost(ctx, msg)
+						}
+					case msg.Headers[headersMethod] == "DELETE":
+						{
+							r.consumeCardDelete(ctx, msg)
+						}
 					}
-					// fmt.Println(msg.Headers["method"])
-					// fmt.Println(string(msg.Body))
 				}
 			}
 		}

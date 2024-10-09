@@ -90,7 +90,7 @@ func (r RootBootstrapper) RunAPI() error {
 
 	r.UserRepository = users_repo.NewUserRepo(r.Infrastructure.DB)
 	r.CardRepository = cards_repo.NewCardRepo(r.Infrastructure.DB)
-	r.RabbitMQ = rabbitmq.NewRabbitMQ().NewConn(r.UserRepository)
+	r.RabbitMQ = rabbitmq.NewRabbitMQ().NewConn(r.UserRepository, r.CardRepository)
 	// time.Sleep(time.Second * 2)
 	go r.RabbitMQ.NewConsumer(ctx)
 
