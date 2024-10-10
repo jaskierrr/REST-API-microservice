@@ -18,7 +18,10 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-const connConfigString = "postgres://%s:%s@%s:%s/%s"
+const (
+	dbConfigString = "postgres://%s:%s@%s:%s/%s"
+	rabbitConfigString = "amqp://%s:%s@%s:%s/"
+)
 
 type RootBootstrapper struct {
 	Infrastructure struct {
@@ -84,18 +87,16 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 func (r RootBootstrapper) RunAPI() error {
 	ctx := context.Background()
 
-	r.Infrastructure.DB = database.NewDB().NewConn(ctx, connConfigString, *r.Config)
+	r.Infrastructure.DB = database.NewDB().NewConn(ctx, dbConfigString, *r.Config)
 
-	// r.registerRepositoriesAndServices(r.Infrastructure.DB)
 
 	r.UserRepository = users_repo.NewUserRepo(r.Infrastructure.DB)
 	r.CardRepository = cards_repo.NewCardRepo(r.Infrastructure.DB)
-	r.RabbitMQ = rabbitmq.NewRabbitMQ().NewConn(r.UserRepository, r.CardRepository)
-	// time.Sleep(time.Second * 2)
+	r.RabbitMQ = rabbitmq.NewRabbitMQ().NewConn(r.UserRepository, r.CardRepository, rabbitConfigString, *r.Config)
 	go r.RabbitMQ.NewConsumer(ctx)
-
 	r.Service = service.New(r.UserRepository, r.CardRepository, r.RabbitMQ)
 
+	// r.registerRepositoriesAndServices(r.Infrastructure.DB)
 	err := r.registerAPIServer(*r.Config)
 	if err != nil {
 		log.Fatal("cant start server")

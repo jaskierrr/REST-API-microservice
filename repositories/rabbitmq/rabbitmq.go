@@ -2,8 +2,10 @@
 package rabbitmq
 
 import (
+	"card-project/config"
 	"card-project/models"
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/jackc/pgx/v5/pgconn"
@@ -34,7 +36,7 @@ type cardRepo interface {
 }
 
 type RabbitMQ interface {
-	NewConn(userRepo userRepo, cardRepo cardRepo) RabbitMQ
+	NewConn(userRepo userRepo, cardRepo cardRepo, connConfigString string, config config.Config) RabbitMQ
 	ProducePostUser(ctx context.Context, userData models.User) error
 	ProduceDeleteUser(ctx context.Context, id int) error
 	ProducePostCard(ctx context.Context, cardData models.Card) error
@@ -51,9 +53,9 @@ func NewRabbitMQ() RabbitMQ {
 	return &rabbitMQ{}
 }
 
-func (r *rabbitMQ) NewConn(userRepo userRepo, cardRepo cardRepo) RabbitMQ {
-
-	conn, err := amqp.Dial("amqp://jaskier:test@rabbitmq:5672/")
+func (r *rabbitMQ) NewConn(userRepo userRepo, cardRepo cardRepo, connConfigString string, config config.Config) RabbitMQ {
+	connString := fmt.Sprintf(connConfigString, config.RabbitMQ.User, config.RabbitMQ.Password, config.RabbitMQ.Host, config.RabbitMQ.Port)
+	conn, err := amqp.Dial(connString)
 	if err != nil {
 		log.Fatalf("Unable to connect to rabbitmq: %v\n", err)
 	}
