@@ -5,6 +5,7 @@ run:
 
 build:
 		docker-compose up --build -d
+		# docker logs -f card-project | jq
 
 swagger:
 		swagger generate server -f ./swagger.yaml --exclude-main

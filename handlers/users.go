@@ -3,6 +3,7 @@ package handlers
 import (
 	"card-project/models"
 	"card-project/restapi/operations"
+	"log"
 	"strconv"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -11,6 +12,8 @@ import (
 func (h *handlers) GetUsers(params operations.GetUsersParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 	user, err := h.controller.GetUsers(ctx)
+
+	log.Println("Test log")
 
 	if err != nil {
 		return operations.NewGetUsersDefault(404).WithPayload(&models.ErrorResponse{

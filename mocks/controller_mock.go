@@ -10,7 +10,6 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	pgconn "github.com/jackc/pgx/v5/pgconn"
 )
 
 // MockController is a mock of Controller interface.
@@ -37,12 +36,11 @@ func (m *MockController) EXPECT() *MockControllerMockRecorder {
 }
 
 // DeleteCardID mocks base method.
-func (m *MockController) DeleteCardID(ctx context.Context, id int) (pgconn.CommandTag, error) {
+func (m *MockController) DeleteCardID(ctx context.Context, id int) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteCardID", ctx, id)
-	ret0, _ := ret[0].(pgconn.CommandTag)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // DeleteCardID indicates an expected call of DeleteCardID.
@@ -52,12 +50,11 @@ func (mr *MockControllerMockRecorder) DeleteCardID(ctx, id interface{}) *gomock.
 }
 
 // DeleteUserID mocks base method.
-func (m *MockController) DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error) {
+func (m *MockController) DeleteUserID(ctx context.Context, id int) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteUserID", ctx, id)
-	ret0, _ := ret[0].(pgconn.CommandTag)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // DeleteUserID indicates an expected call of DeleteUserID.

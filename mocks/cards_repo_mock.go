@@ -82,7 +82,7 @@ func (mr *MockCardsRepoMockRecorder) GetCards(ctx interface{}) *gomock.Call {
 }
 
 // PostCard mocks base method.
-func (m *MockCardsRepo) PostCard(ctx context.Context, card models.NewCard) (models.Card, error) {
+func (m *MockCardsRepo) PostCard(ctx context.Context, card models.Card) (models.Card, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "PostCard", ctx, card)
 	ret0, _ := ret[0].(models.Card)

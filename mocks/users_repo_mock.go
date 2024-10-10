@@ -82,7 +82,7 @@ func (mr *MockUsersRepoMockRecorder) GetUsers(ctx interface{}) *gomock.Call {
 }
 
 // PostUser mocks base method.
-func (m *MockUsersRepo) PostUser(ctx context.Context, user models.NewUser) (models.User, error) {
+func (m *MockUsersRepo) PostUser(ctx context.Context, user models.User) (models.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "PostUser", ctx, user)
 	ret0, _ := ret[0].(models.User)
