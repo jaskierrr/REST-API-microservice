@@ -113,7 +113,7 @@ func init() {
         "summary": "Get a bank by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -141,7 +141,7 @@ func init() {
         "summary": "Delete a bank by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -243,7 +243,7 @@ func init() {
         "summary": "Get a card by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -271,7 +271,7 @@ func init() {
         "summary": "Delete a card by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -373,7 +373,7 @@ func init() {
         "summary": "Get a user by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -401,7 +401,7 @@ func init() {
         "summary": "Delete a user by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -429,7 +429,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string"
+          "type": "integer"
         }
       }
     },
@@ -477,7 +477,8 @@ func init() {
       "type": "object",
       "properties": {
         "Name": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -485,17 +486,20 @@ func init() {
       "type": "object",
       "properties": {
         "BankID": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "CreateDate": {
           "type": "string",
           "format": "date-time"
         },
         "Number": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "UserID": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -503,10 +507,12 @@ func init() {
       "type": "object",
       "properties": {
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -517,7 +523,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string"
+          "type": "integer"
         },
         "lastName": {
           "type": "string"
@@ -622,7 +628,7 @@ func init() {
         "summary": "Get a bank by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -650,7 +656,7 @@ func init() {
         "summary": "Delete a bank by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -752,7 +758,7 @@ func init() {
         "summary": "Get a card by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -780,7 +786,7 @@ func init() {
         "summary": "Delete a card by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -882,7 +888,7 @@ func init() {
         "summary": "Get a user by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -910,7 +916,7 @@ func init() {
         "summary": "Delete a user by ID",
         "parameters": [
           {
-            "type": "string",
+            "type": "integer",
             "name": "id",
             "in": "path",
             "required": true
@@ -938,7 +944,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string"
+          "type": "integer"
         }
       }
     },
@@ -995,7 +1001,8 @@ func init() {
       "type": "object",
       "properties": {
         "Name": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -1003,17 +1010,20 @@ func init() {
       "type": "object",
       "properties": {
         "BankID": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "CreateDate": {
           "type": "string",
           "format": "date-time"
         },
         "Number": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "UserID": {
-          "type": "integer"
+          "type": "integer",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -1021,10 +1031,12 @@ func init() {
       "type": "object",
       "properties": {
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "x-go-custom-tag": "validate:\"required\""
         }
       }
     },
@@ -1035,7 +1047,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "string"
+          "type": "integer"
         },
         "lastName": {
           "type": "string"

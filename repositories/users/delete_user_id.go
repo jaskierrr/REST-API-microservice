@@ -7,11 +7,13 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func (repo *userRepo) DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error) {
+func (repo *userRepo) DeleteUserID(ctx context.Context, id int) (pgconn.CommandTag, error) {
 	args := pgx.NamedArgs{
 		"userID": id,
 	}
-	commandTag, err := repo.db.GetConn().Exec(ctx, deleteUserIDQuery, args)
+	commandTag, err := repo.db.
+		GetConn().
+		Exec(ctx, deleteUserIDQuery, args)
 
 	return commandTag, err
 }

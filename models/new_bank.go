@@ -18,7 +18,7 @@ import (
 type NewBank struct {
 
 	// name
-	Name string `json:"Name,omitempty"`
+	Name string `json:"Name,omitempty" validate:"required"`
 }
 
 // Validate validates this new bank

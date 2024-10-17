@@ -16,12 +16,10 @@ import (
 //
 // swagger:model NewUser
 type NewUser struct {
-
 	// first name
-	FirstName string `json:"firstName,omitempty"`
-
+	FirstName string `json:"firstName,omitempty" validate:"required"`
 	// last name
-	LastName string `json:"lastName,omitempty"`
+	LastName string `json:"lastName,omitempty" validate:"required"`
 }
 
 // Validate validates this new user

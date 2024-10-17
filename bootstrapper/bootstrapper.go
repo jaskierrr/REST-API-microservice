@@ -5,31 +5,41 @@ import (
 	"card-project/controller"
 	"card-project/database"
 	"card-project/handlers"
+	"card-project/logger"
 	cards_repo "card-project/repositories/cards"
+	"card-project/repositories/rabbitmq"
 	users_repo "card-project/repositories/users"
 	"card-project/restapi"
 	"card-project/restapi/operations"
 	"card-project/service"
 	"context"
 	"log"
+	"log/slog"
 
 	"github.com/go-openapi/loads"
+	"github.com/go-playground/validator/v10"
 )
 
-const connConfigString = "postgres://%s:%s@%s:%s/%s"
+const (
+	dbConfigString = "postgres://%s:%s@%s:%s/%s"
+	rabbitConfigString = "amqp://%s:%s@%s:%s/"
+)
 
 type RootBootstrapper struct {
 	Infrastructure struct {
-		// Logger
+		Logger *slog.Logger
 		Server *restapi.Server
 		DB     database.DB
 	}
-	Controller controller.Controller
-	Config     *config.Config
-	Handlers   handlers.Handlers
+	Controller     controller.Controller
+	Config         *config.Config
+	Handlers       handlers.Handlers
 	UserRepository users_repo.UsersRepo
 	CardRepository cards_repo.CardsRepo
-	Service    service.Service
+	RabbitMQ       rabbitmq.RabbitMQ
+	Service        service.Service
+
+	Validator *validator.Validate
 }
 
 type RootBoot interface {
@@ -53,8 +63,9 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 	api := operations.NewCardProjectAPI(swaggerSpec)
 
 	r.Controller = controller.New(r.Service)
+	r.Validator = validator.New(validator.WithRequiredStructEnabled())
 
-	r.Handlers = handlers.New(r.Controller)
+	r.Handlers = handlers.New(r.Controller, r.Validator)
 	r.Handlers.Link(api)
 	if r.Handlers == nil {
 		log.Fatal("handlers initialization failed")
@@ -77,15 +88,16 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 
 func (r RootBootstrapper) RunAPI() error {
 	ctx := context.Background()
+	r.Infrastructure.Logger = logger.NewLogger()
 
-	r.Infrastructure.DB = database.NewDB().NewConn(ctx, connConfigString, *r.Config)
-
-	// r.registerRepositoriesAndServices(r.Infrastructure.DB)
-
+	r.Infrastructure.DB = database.NewDB().NewConn(ctx, dbConfigString, *r.Config)
 	r.UserRepository = users_repo.NewUserRepo(r.Infrastructure.DB)
 	r.CardRepository = cards_repo.NewCardRepo(r.Infrastructure.DB)
-	r.Service = service.New(r.UserRepository, r.CardRepository)
+	r.RabbitMQ = rabbitmq.NewRabbitMQ().NewConn(r.UserRepository, r.CardRepository, rabbitConfigString, *r.Config)
+	go r.RabbitMQ.NewConsumer(ctx)
+	r.Service = service.New(r.UserRepository, r.CardRepository, r.RabbitMQ)
 
+	// r.registerRepositoriesAndServices(r.Infrastructure.DB)
 	err := r.registerAPIServer(*r.Config)
 	if err != nil {
 		log.Fatal("cant start server")

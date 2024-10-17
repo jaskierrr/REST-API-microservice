@@ -65,7 +65,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         200:
           description: "Ok"
@@ -83,7 +83,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         204:
           description: "User deleted"
@@ -148,7 +148,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         200:
           description: "Ok"
@@ -166,7 +166,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         204:
           description: "Card deleted"
@@ -231,7 +231,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         200:
           description: "Ok"
@@ -249,7 +249,7 @@ paths:
         - name: id
           in: path
           required: true
-          type: string
+          type: integer
       responses:
         204:
           description: "Bank deleted"
@@ -262,7 +262,7 @@ definitions:
     type: object
     properties:
       id:
-        type: string
+        type: integer
       firstName:
         type: string
       lastName:
@@ -272,13 +272,15 @@ definitions:
     properties:
       firstName:
         type: string
+        x-go-custom-tag: "validate:\"required\""
       lastName:
         type: string
+        x-go-custom-tag: "validate:\"required\""
   Bank:
     type: object
     properties:
       id:
-        type: string
+        type: integer
       Name:
         type: string
   NewBank:
@@ -286,6 +288,7 @@ definitions:
     properties:
       Name:
         type: string
+        x-go-custom-tag: "validate:\"required\""
   Card:
     type: object
     properties:
@@ -305,10 +308,13 @@ definitions:
     properties:
       UserID:
         type: integer
+        x-go-custom-tag: "validate:\"required\""
       BankID:
         type: integer
+        x-go-custom-tag: "validate:\"required\""
       Number:
         type: integer
+        x-go-custom-tag: "validate:\"required\""
       CreateDate:
         type: string
         format: date-time

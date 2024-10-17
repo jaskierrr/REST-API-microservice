@@ -1,9 +1,9 @@
-project with bank cards
+# project with bank cards
 
 swagger generate server -f ./swagger.yaml --exclude-main
 
 
-docker-compose up --build
+docker-compose up --build -d
 
 docker-compose up -d
 

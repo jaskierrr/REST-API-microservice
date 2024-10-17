@@ -7,12 +7,15 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (repo *cardRepo) GetCardID(ctx context.Context, id string) (models.Card, error) {
+func (repo *cardRepo) GetCardID(ctx context.Context, id int) (models.Card, error) {
 	args := pgx.NamedArgs{
 		"cardID": id,
 	}
 	card := models.Card{}
-	err := repo.db.GetConn().QueryRow(ctx, getCardIDQuery, args).Scan(&card.ID, &card.UserID, &card.BankID, &card.Number, &card.CreateDate)
+	err := repo.db.
+		GetConn().
+		QueryRow(ctx, getCardIDQuery, args).
+		Scan(&card.ID, &card.UserID, &card.BankID, &card.Number, &card.CreateDate)
 
 	return card, err
 }

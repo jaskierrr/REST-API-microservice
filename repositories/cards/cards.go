@@ -1,3 +1,4 @@
+//go:generate mockgen -source=./cards.go -destination=../../mocks/cards_repo_mock.go -package=mock
 package cards_repo
 
 import (
@@ -10,7 +11,7 @@ import (
 
 const (
 	getCardIDQuery    = `select * from cards where id = @cardID`
-	postCardQuery     = `insert into cards (number, userid, bankid, created_at) values (@number, @userID, @bankID, now()) returning *`
+	postCardQuery     = `insert into cards (id, userid, bankid, number, created_at) values (@id, @userID, @bankID, @number, @create_date) returning *`
 	deleteCardIDQuery = `delete from cards where id = @cardID`
 	getCardsQuery     = `select * from cards`
 )
@@ -20,9 +21,9 @@ type cardRepo struct {
 }
 
 type CardsRepo interface {
-	GetCardID(ctx context.Context, id string) (models.Card, error)
-	PostCard(ctx context.Context, card models.NewCard) (models.Card, error)
-	DeleteCardID(ctx context.Context, id string) (pgconn.CommandTag, error)
+	GetCardID(ctx context.Context, id int) (models.Card, error)
+	PostCard(ctx context.Context, card models.Card) (models.Card, error)
+	DeleteCardID(ctx context.Context, id int) (pgconn.CommandTag, error)
 	GetCards(ctx context.Context) ([]*models.Card, error)
 }
 

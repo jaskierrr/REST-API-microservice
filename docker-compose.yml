@@ -3,22 +3,22 @@ services:
     container_name: postgres
     image: postgres:16
     environment:
-      POSTGRES_DB: "card-project"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: 098098
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - ./data/postgers-data:/var/lib/postgresql/pgdata
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}"
     restart: always
 
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4:8.11
     environment:
-      PGADMIN_DEFAULT_EMAIL: "test@test.com"
-      PGADMIN_DEFAULT_PASSWORD: "test"
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
       PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:
       - pgadmin-data:/var/lib/pgadmin
@@ -27,12 +27,18 @@ services:
     restart: always
 
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3.10.7-management
     hostname: rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 30s
+      timeout: 30s
+      retries: 10
     restart: always
     environment:
-      - RABBITMQ_DEFAULT_USER=jaskier
-      - RABBITMQ_DEFAULT_PASS=test
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
     volumes:
       - ./data/rabbitmq-data:/var/lib/rabbitmq
@@ -42,6 +48,12 @@ services:
   card-project-api:
     container_name: card-project
     image: card-project
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 15
+        window: 20s
+
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -54,14 +66,13 @@ services:
       - .:/app
 
   migrate:
-      container_name: migrater
-      image: migrate/migrate
-      depends_on:
-        - postgres
-      volumes:
-        - C:\my\go\card-project\migrations:/database
-      command:
-        [ "-path", "/database", "-database",  "postgres://postgres:098098@postgres:5432/card-project?sslmode=disable", "up" ]
+    container_name: migrater
+    image: migrate/migrate
+    depends_on:
+      - postgres
+    volumes:
+      - C:\my\go\card-project\migrations:/database
+    command: [ "-path", "/database", "-database", "postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable", "up" ]
 
 volumes:
   postgers-data:

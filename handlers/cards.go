@@ -3,6 +3,7 @@ package handlers
 import (
 	"card-project/models"
 	"card-project/restapi/operations"
+	"strconv"
 
 	"github.com/go-openapi/runtime/middleware"
 )
@@ -24,12 +25,12 @@ func (h *handlers) GetCards(params operations.GetCardsParams) middleware.Respond
 
 func (h *handlers) GetCardsID(params operations.GetCardsIDParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
-	card, err := h.controller.GetCardID(ctx, params.ID)
+	card, err := h.controller.GetCardID(ctx, int(params.ID))
 
 	if err != nil {
 		return operations.NewGetCardsIDDefault(404).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to GET Card in storage, card id: " + params.ID + " " + err.Error(),
+				Message: "Failed to GET Card in storage, card id: " + strconv.FormatInt(params.ID, 10) + " " + err.Error(),
 			},
 		})
 	}
@@ -39,20 +40,12 @@ func (h *handlers) GetCardsID(params operations.GetCardsIDParams) middleware.Res
 
 func (h *handlers) DeleteCardsID(params operations.DeleteCardsIDParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
-	commandTag, err := h.controller.DeleteCardID(ctx, params.ID)
-
-	if commandTag.RowsAffected() == 0 {
-		return operations.NewDeleteCardsIDDefault(404).WithPayload(&models.ErrorResponse{
-			Error: &models.ErrorResponseAO0Error{
-				Message: "card not found, card id: " + params.ID + " " + err.Error(),
-			},
-		})
-	}
+	err := h.controller.DeleteCardID(ctx, int(params.ID))
 
 	if err != nil {
 		return operations.NewDeleteCardsIDDefault(500).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to DELETE Card in storage, card id: " + params.ID + " " + err.Error(),
+				Message: "Failed to DELETE Card in storage, card id: " + strconv.FormatInt(params.ID, 10) + " " + err.Error(),
 			},
 		})
 	}
@@ -61,6 +54,16 @@ func (h *handlers) DeleteCardsID(params operations.DeleteCardsIDParams) middlewa
 }
 
 func (h *handlers) PostCards(params operations.PostCardsParams) middleware.Responder {
+	err := validate.Struct(params.Card)
+	if err != nil {
+		return operations.NewGetCardsIDDefault(500).WithPayload(&models.ErrorResponse{
+			Error: &models.ErrorResponseAO0Error{
+				Message: "Failed to POST Card in storage " + err.Error(),
+			},
+		})
+	}
+
+
 	ctx := params.HTTPRequest.Context()
 	card, err := h.controller.PostCard(ctx, *params.Card)
 

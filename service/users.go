@@ -4,25 +4,33 @@ import (
 	"card-project/models"
 	"context"
 
-	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/google/uuid"
 )
 
-func (s service) GetUserID(ctx context.Context, id string) (models.User, error) {
+func (s service) GetUserID(ctx context.Context, id int) (models.User, error) {
 	user, err := s.userRepo.GetUserID(ctx, id)
 
 	return user, err
 }
 
 func (s service) PostUser(ctx context.Context, userData models.NewUser) (models.User, error) {
-	user, err := s.userRepo.PostUser(ctx, userData)
+	id, _ := uuid.NewUUID()
+
+	user := models.User{
+		ID:        int64(id.ID()),
+		FirstName: userData.FirstName,
+		LastName:  userData.LastName,
+	}
+
+	err := s.rabbitMQ.ProducePostUser(ctx, user)
 
 	return user, err
 }
 
-func (s service) DeleteUserID(ctx context.Context, id string) (pgconn.CommandTag, error) {
-	commandTag, err := s.userRepo.DeleteUserID(ctx, id)
+func (s service) DeleteUserID(ctx context.Context, id int) error {
+	err := s.rabbitMQ.ProduceDeleteUser(ctx, id)
 
-	return commandTag, err
+	return err
 }
 
 func (s service) GetUsers(ctx context.Context) ([]*models.User, error) {

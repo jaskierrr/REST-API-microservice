@@ -18,19 +18,15 @@ import (
 //
 // swagger:model NewCard
 type NewCard struct {
-
 	// bank ID
-	BankID int64 `json:"BankID,omitempty"`
-
+	BankID int64 `json:"BankID,omitempty" validate:"required"`
+	// user ID
+	UserID int64 `json:"UserID,omitempty" validate:"required"`
+	// number
+	Number int64 `json:"Number,omitempty" validate:"required"`
 	// create date
 	// Format: date-time
 	CreateDate strfmt.DateTime `json:"CreateDate,omitempty"`
-
-	// number
-	Number int64 `json:"Number,omitempty"`
-
-	// user ID
-	UserID int64 `json:"UserID,omitempty"`
 }
 
 // Validate validates this new card
