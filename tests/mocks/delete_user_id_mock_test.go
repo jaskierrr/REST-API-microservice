@@ -98,7 +98,7 @@ func Test_DeleteUserID(t *testing.T) {
 			response := h.DeleteUsersID(tt.args)
 
 			if !reflect.DeepEqual(response, tt.wantRes) {
-				t.Errorf("DeleteCard() = %v, want %v", response, tt.wantRes)
+				t.Errorf("DeleteUser() = %v, want %v", response, tt.wantRes)
 			}
 		})
 	}

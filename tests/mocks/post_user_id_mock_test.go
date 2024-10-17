@@ -109,7 +109,7 @@ func Test_PostUserID(t *testing.T) {
 
 			//! тест работает, но response := h.PostCards(tt.args) генерит свой id, а tt.wantRes имеет изначально заданный, я незнаю как из respons вытащить id и вставить его в tt.wantRes
 			if !reflect.DeepEqual(response, tt.wantRes) {
-				t.Errorf("PostCard() = %v, want %v", response, tt.wantRes)
+				t.Errorf("PostUser() = %v, want %v", response, tt.wantRes)
 			}
 		})
 	}

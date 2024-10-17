@@ -105,7 +105,7 @@ func Test_GetUserID(t *testing.T) {
 			response := h.GetUsersID(tt.args)
 
 			if !reflect.DeepEqual(response, tt.wantRes) {
-				t.Errorf("GetCard() = %v, want %v", response, tt.wantRes)
+				t.Errorf("GetUser() = %v, want %v", response, tt.wantRes)
 			}
 		})
 	}
