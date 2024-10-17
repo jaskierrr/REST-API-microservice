@@ -8,9 +8,7 @@ import (
 )
 
 func (s service) GetUserID(ctx context.Context, id int) (models.User, error) {
-	user, err := s.userRepo.GetUserID(ctx, id)
-
-	return user, err
+	return s.userRepo.GetUserID(ctx, id)
 }
 
 func (s service) PostUser(ctx context.Context, userData models.NewUser) (models.User, error) {
@@ -21,20 +19,18 @@ func (s service) PostUser(ctx context.Context, userData models.NewUser) (models.
 		FirstName: userData.FirstName,
 		LastName:  userData.LastName,
 	}
-
 	err := s.rabbitMQ.ProducePostUser(ctx, user)
 
-	return user, err
+	if err != nil {
+		return models.User{}, err
+	}
+	return user, nil
 }
 
 func (s service) DeleteUserID(ctx context.Context, id int) error {
-	err := s.rabbitMQ.ProduceDeleteUser(ctx, id)
-
-	return err
+	return s.rabbitMQ.ProduceDeleteUser(ctx, id)
 }
 
 func (s service) GetUsers(ctx context.Context) ([]*models.User, error) {
-	user, err := s.userRepo.GetUsers(ctx)
-
-	return user, err
+	return s.userRepo.GetUsers(ctx)
 }

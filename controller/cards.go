@@ -6,21 +6,17 @@ import (
 )
 
 func (c controller) GetCardID(ctx context.Context, id int) (models.Card, error) {
-	card, err := c.service.GetCardID(ctx, id)
-	return card, err
+	return c.service.GetCardID(ctx, id)
 }
 
 func (c controller) PostCard(ctx context.Context, cardData models.NewCard) (models.Card, error) {
-	card, err := c.service.PostCard(ctx, cardData)
-	return card, err
+	return c.service.PostCard(ctx, cardData)
 }
 
 func (c controller) DeleteCardID(ctx context.Context, id int) error {
-	err := c.service.DeleteCardID(ctx, id)
-	return err
+	return c.service.DeleteCardID(ctx, id)
 }
 
 func (c controller) GetCards(ctx context.Context) ([]*models.Card, error) {
-	card, err := c.service.GetCards(ctx)
-	return card, err
+	return c.service.GetCards(ctx)
 }

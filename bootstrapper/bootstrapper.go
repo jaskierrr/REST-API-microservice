@@ -20,11 +20,6 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-const (
-	dbConfigString = "postgres://%s:%s@%s:%s/%s"
-	rabbitConfigString = "amqp://%s:%s@%s:%s/"
-)
-
 type RootBootstrapper struct {
 	Infrastructure struct {
 		Logger *slog.Logger
@@ -90,10 +85,10 @@ func (r RootBootstrapper) RunAPI() error {
 	ctx := context.Background()
 	r.Infrastructure.Logger = logger.NewLogger()
 
-	r.Infrastructure.DB = database.NewDB().NewConn(ctx, dbConfigString, *r.Config)
+	r.Infrastructure.DB = database.NewDB().NewConn(ctx, *r.Config)
 	r.UserRepository = users_repo.NewUserRepo(r.Infrastructure.DB)
 	r.CardRepository = cards_repo.NewCardRepo(r.Infrastructure.DB)
-	r.RabbitMQ = rabbitmq.NewRabbitMQ().NewConn(r.UserRepository, r.CardRepository, rabbitConfigString, *r.Config)
+	r.RabbitMQ = rabbitmq.NewConn(r.UserRepository, r.CardRepository, *r.Config)
 	go r.RabbitMQ.NewConsumer(ctx)
 	r.Service = service.New(r.UserRepository, r.CardRepository, r.RabbitMQ)
 
