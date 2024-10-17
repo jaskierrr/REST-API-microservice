@@ -7,10 +7,8 @@ import (
 	"card-project/models"
 	"card-project/restapi/operations"
 	"card-project/service"
-	"errors"
 	"net/http"
 	"reflect"
-	"strconv"
 	"testing"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -18,7 +16,7 @@ import (
 	"github.com/golang/mock/gomock"
 )
 
-func Test_DeleteCardID(t *testing.T) {
+func Test_PostUserID(t *testing.T) {
 	type fields struct {
 		rabbitmq *mock.MockRabbitMQ
 		cardRepo *mock.MockCardsRepo
@@ -42,26 +40,39 @@ func Test_DeleteCardID(t *testing.T) {
 	controller := controller.New(service)
 	h := handlers.New(controller, validator.New(validator.WithRequiredStructEnabled()))
 
-	reqArgDef := operations.DeleteCardsIDParams{
+	reqArgDef := operations.PostUsersParams{
 		HTTPRequest: &http.Request{},
-		ID:          1,
-	}
 
-	reqArgErr := operations.DeleteCardsIDParams{
-		HTTPRequest: &http.Request{},
-		ID:          111,
-	}
-
-	resErr := operations.NewDeleteCardsIDDefault(500).WithPayload(&models.ErrorResponse{
-		Error: &models.ErrorResponseAO0Error{
-			Message: "Failed to DELETE Card in storage, card id: " + strconv.FormatInt(reqArgErr.ID, 10) + " " + errors.New("no rows in result set").Error(),
+		User: &models.NewUser{
+			FirstName: "Ivan",
+			LastName:  "Makaroshka",
 		},
-	})
+	}
 
+	user := models.User{
+		ID:        1,
+		FirstName: "Ivan",
+		LastName:  "Makaroshka",
+	}
+
+	// reqArgErr := operations.PostUsersParams{
+	// 	HTTPRequest: &http.Request{},
+
+	// 	User: &models.NewUser{
+		// FirstName: "Ivan",
+		// LastName:  "Makaroshka",
+	// },
+	// }
+
+	// resErr := operations.NewGetCardsIDDefault(500).WithPayload(&models.ErrorResponse{
+	// 	Error: &models.ErrorResponseAO0Error{
+	// 		Message: "Failed to POST Card in storage " + errors.New("").Error(),
+	// 	},
+	// })
 
 	tests := []struct {
 		name    string
-		args    operations.DeleteCardsIDParams
+		args    operations.PostUsersParams
 		prepare func(f *fields)
 		wantRes middleware.Responder
 	}{
@@ -71,22 +82,21 @@ func Test_DeleteCardID(t *testing.T) {
 			prepare: func(f *fields) {
 				// если указанные вызовы не станут выполняться в ожидаемом порядке, тест будет провален
 				gomock.InOrder(
-					f.rabbitmq.EXPECT().ProduceDeleteCard(gomock.Any(), 1).Return(nil),
+					f.rabbitmq.EXPECT().ProducePostUser(gomock.Any(), gomock.Any()).Return(nil),
 				)
 			},
-			wantRes: operations.NewDeleteCardsIDNoContent(),
+			wantRes: operations.NewPostUsersCreated().WithPayload(&user),
 		},
-		{
-			//? я не понял что я могу тут проверить, если ошибка у меня рождается только если рэббиту плохо, но я так понимаю у меня в хендлере уже стоит обработка ошибки на неверный id, поэтому этот тест проходит, так как я насильно ее получаю в EXPECT?
-			name: "wrong_ID",
-			args: reqArgErr,
-			prepare: func(f *fields) {
-				gomock.InOrder(
-					f.rabbitmq.EXPECT().ProduceDeleteCard(gomock.Any(), 111).Return(errors.New("no rows in result set")),
-				)
-			},
-			wantRes: resErr,
-		},
+		// {
+		// 	name: "wrong_ID",
+		// 	args: reqArgErr,
+		// 	prepare: func(f *fields) {
+		// 		gomock.InOrder(
+		// 			f.rabbitmq.EXPECT().ProducePostCard(gomock.Any(), reqArgErr).Return(errors.New("no rows in result set")),
+		// 		)
+		// 	},
+		// 	wantRes: resErr,
+		// },
 	}
 
 	for _, tt := range tests {
@@ -95,10 +105,11 @@ func Test_DeleteCardID(t *testing.T) {
 				tt.prepare(testFields)
 			}
 
-			response := h.DeleteCardsID(tt.args)
+			response := h.PostUsers(tt.args)
 
+			//! тест работает, но response := h.PostCards(tt.args) генерит свой id, а tt.wantRes имеет изначально заданный, я незнаю как из respons вытащить id и вставить его в tt.wantRes
 			if !reflect.DeepEqual(response, tt.wantRes) {
-				t.Errorf("DeleteCard() = %v, want %v", response, tt.wantRes)
+				t.Errorf("PostCard() = %v, want %v", response, tt.wantRes)
 			}
 		})
 	}

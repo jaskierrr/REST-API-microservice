@@ -18,7 +18,7 @@ import (
 	"github.com/golang/mock/gomock"
 )
 
-func Test_DeleteCardID(t *testing.T) {
+func Test_DeleteUserID(t *testing.T) {
 	type fields struct {
 		rabbitmq *mock.MockRabbitMQ
 		cardRepo *mock.MockCardsRepo
@@ -42,26 +42,26 @@ func Test_DeleteCardID(t *testing.T) {
 	controller := controller.New(service)
 	h := handlers.New(controller, validator.New(validator.WithRequiredStructEnabled()))
 
-	reqArgDef := operations.DeleteCardsIDParams{
+	reqArgDef := operations.DeleteUsersIDParams{
 		HTTPRequest: &http.Request{},
 		ID:          1,
 	}
 
-	reqArgErr := operations.DeleteCardsIDParams{
+	reqArgErr := operations.DeleteUsersIDParams{
 		HTTPRequest: &http.Request{},
 		ID:          111,
 	}
 
-	resErr := operations.NewDeleteCardsIDDefault(500).WithPayload(&models.ErrorResponse{
+	resErr := operations.NewDeleteUsersIDDefault(500).WithPayload(&models.ErrorResponse{
 		Error: &models.ErrorResponseAO0Error{
-			Message: "Failed to DELETE Card in storage, card id: " + strconv.FormatInt(reqArgErr.ID, 10) + " " + errors.New("no rows in result set").Error(),
+			Message: "Failed to DELETE User in storage, user id: " + strconv.FormatInt(reqArgErr.ID, 10) + " " + errors.New("no rows in result set").Error(),
 		},
 	})
 
 
 	tests := []struct {
 		name    string
-		args    operations.DeleteCardsIDParams
+		args    operations.DeleteUsersIDParams
 		prepare func(f *fields)
 		wantRes middleware.Responder
 	}{
@@ -71,10 +71,10 @@ func Test_DeleteCardID(t *testing.T) {
 			prepare: func(f *fields) {
 				// если указанные вызовы не станут выполняться в ожидаемом порядке, тест будет провален
 				gomock.InOrder(
-					f.rabbitmq.EXPECT().ProduceDeleteCard(gomock.Any(), 1).Return(nil),
+					f.rabbitmq.EXPECT().ProduceDeleteUser(gomock.Any(), 1).Return(nil),
 				)
 			},
-			wantRes: operations.NewDeleteCardsIDNoContent(),
+			wantRes: operations.NewDeleteUsersIDNoContent(),
 		},
 		{
 			//? я не понял что я могу тут проверить, если ошибка у меня рождается только если рэббиту плохо, но я так понимаю у меня в хендлере уже стоит обработка ошибки на неверный id, поэтому этот тест проходит, так как я насильно ее получаю в EXPECT?
@@ -82,7 +82,7 @@ func Test_DeleteCardID(t *testing.T) {
 			args: reqArgErr,
 			prepare: func(f *fields) {
 				gomock.InOrder(
-					f.rabbitmq.EXPECT().ProduceDeleteCard(gomock.Any(), 111).Return(errors.New("no rows in result set")),
+					f.rabbitmq.EXPECT().ProduceDeleteUser(gomock.Any(), 111).Return(errors.New("no rows in result set")),
 				)
 			},
 			wantRes: resErr,
@@ -95,7 +95,7 @@ func Test_DeleteCardID(t *testing.T) {
 				tt.prepare(testFields)
 			}
 
-			response := h.DeleteCardsID(tt.args)
+			response := h.DeleteUsersID(tt.args)
 
 			if !reflect.DeepEqual(response, tt.wantRes) {
 				t.Errorf("DeleteCard() = %v, want %v", response, tt.wantRes)
