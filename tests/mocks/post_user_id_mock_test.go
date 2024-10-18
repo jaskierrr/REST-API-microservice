@@ -3,6 +3,7 @@ package handlers_test
 import (
 	"card-project/controller"
 	"card-project/handlers"
+	"card-project/logger"
 	mock "card-project/mocks"
 	"card-project/models"
 	"card-project/restapi/operations"
@@ -26,6 +27,8 @@ func Test_PostUserID(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
+	logger := logger.NewLogger()
+
 	rabbitmqMock := mock.NewMockRabbitMQ(ctrl)
 	cardRepoMock := mock.NewMockCardsRepo(ctrl)
 	userRepoMock := mock.NewMockUsersRepo(ctrl)
@@ -37,8 +40,8 @@ func Test_PostUserID(t *testing.T) {
 	}
 
 	service := service.New(userRepoMock, cardRepoMock, rabbitmqMock)
-	controller := controller.New(service)
-	h := handlers.New(controller, validator.New(validator.WithRequiredStructEnabled()))
+	controller := controller.New(service, logger)
+	h := handlers.New(controller, validator.New(validator.WithRequiredStructEnabled()), logger)
 
 	reqArgDef := operations.PostUsersParams{
 		HTTPRequest: &http.Request{},

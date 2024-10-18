@@ -3,7 +3,7 @@ package handlers
 import (
 	"card-project/models"
 	"card-project/restapi/operations"
-	"strconv"
+	"log/slog"
 
 	"github.com/go-openapi/runtime/middleware"
 )
@@ -15,7 +15,7 @@ func (h *handlers) GetCards(params operations.GetCardsParams) middleware.Respond
 	if err != nil {
 		return operations.NewGetCardsDefault(404).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to GET Cards in storage " + err.Error(),
+				Message: "Failed to GET Cards from storage " + err.Error(),
 			},
 		})
 	}
@@ -24,13 +24,15 @@ func (h *handlers) GetCards(params operations.GetCardsParams) middleware.Respond
 }
 
 func (h *handlers) GetCardsID(params operations.GetCardsIDParams) middleware.Responder {
+	h.logger.Info("Trying to GET card from storage, user id: " + convertI64tStr(params.ID))
+
 	ctx := params.HTTPRequest.Context()
 	card, err := h.controller.GetCardID(ctx, int(params.ID))
 
 	if err != nil {
 		return operations.NewGetCardsIDDefault(404).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to GET Card in storage, card id: " + strconv.FormatInt(params.ID, 10) + " " + err.Error(),
+				Message: "Failed to GET Card from storage, card id: " + convertI64tStr(params.ID) + " " + err.Error(),
 			},
 		})
 	}
@@ -39,13 +41,16 @@ func (h *handlers) GetCardsID(params operations.GetCardsIDParams) middleware.Res
 }
 
 func (h *handlers) DeleteCardsID(params operations.DeleteCardsIDParams) middleware.Responder {
+	h.logger.Info("Trying to DELETE card from storage, user id: " + convertI64tStr(params.ID))
+
 	ctx := params.HTTPRequest.Context()
 	err := h.controller.DeleteCardID(ctx, int(params.ID))
 
 	if err != nil {
+		h.logger.Info("Failed to DELETE Card from storage, card id: " + convertI64tStr(params.ID) + " " + err.Error())
 		return operations.NewDeleteCardsIDDefault(500).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to DELETE Card in storage, card id: " + strconv.FormatInt(params.ID, 10) + " " + err.Error(),
+				Message: "Failed to DELETE Card from storage, card id: " + convertI64tStr(params.ID) + " " + err.Error(),
 			},
 		})
 	}
@@ -54,6 +59,11 @@ func (h *handlers) DeleteCardsID(params operations.DeleteCardsIDParams) middlewa
 }
 
 func (h *handlers) PostCards(params operations.PostCardsParams) middleware.Responder {
+	h.logger.Info(
+		"Trying to POST user in storage",
+		slog.Any("user", params.Card),
+	)
+
 	err := validate.Struct(params.Card)
 	if err != nil {
 		return operations.NewGetCardsIDDefault(500).WithPayload(&models.ErrorResponse{
@@ -62,7 +72,6 @@ func (h *handlers) PostCards(params operations.PostCardsParams) middleware.Respo
 			},
 		})
 	}
-
 
 	ctx := params.HTTPRequest.Context()
 	card, err := h.controller.PostCard(ctx, *params.Card)

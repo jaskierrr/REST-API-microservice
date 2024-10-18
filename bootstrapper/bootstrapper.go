@@ -5,7 +5,7 @@ import (
 	"card-project/controller"
 	"card-project/database"
 	"card-project/handlers"
-	"card-project/logger"
+	logger "card-project/logger"
 	cards_repo "card-project/repositories/cards"
 	"card-project/repositories/rabbitmq"
 	users_repo "card-project/repositories/users"
@@ -38,18 +38,18 @@ type RootBootstrapper struct {
 }
 
 type RootBoot interface {
+	registerRepositoriesAndServices(ctx context.Context, db database.DB)
 	registerAPIServer(cfg config.Config) error
-	// registerRepositoriesAndServices(db database.DB)
 	RunAPI() error
 }
 
 func New() RootBoot {
-	return RootBootstrapper{
+	return &RootBootstrapper{
 		Config: config.NewConfig(),
 	}
 }
 
-func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
+func (r *RootBootstrapper) registerAPIServer(cfg config.Config) error {
 	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
 	if err != nil {
 		return err
@@ -57,10 +57,12 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 
 	api := operations.NewCardProjectAPI(swaggerSpec)
 
-	r.Controller = controller.New(r.Service)
+	logger := r.Infrastructure.Logger
+
+	r.Controller = controller.New(r.Service, logger)
 	r.Validator = validator.New(validator.WithRequiredStructEnabled())
 
-	r.Handlers = handlers.New(r.Controller, r.Validator)
+	r.Handlers = handlers.New(r.Controller, r.Validator, logger)
 	r.Handlers.Link(api)
 	if r.Handlers == nil {
 		log.Fatal("handlers initialization failed")
@@ -76,23 +78,20 @@ func (r RootBootstrapper) registerAPIServer(cfg config.Config) error {
 	return nil
 }
 
-// func (r RootBootstrapper) registerRepositoriesAndServices(db database.DB) {
-// 	r.Repository = repositories.NewUserRepo(db)
-// 	r.Service = service.New(r.Repository)
-// }
-
-func (r RootBootstrapper) RunAPI() error {
-	ctx := context.Background()
-	r.Infrastructure.Logger = logger.NewLogger()
-
+func (r *RootBootstrapper) registerRepositoriesAndServices(ctx context.Context, db database.DB) {
 	r.Infrastructure.DB = database.NewDB().NewConn(ctx, *r.Config)
 	r.UserRepository = users_repo.NewUserRepo(r.Infrastructure.DB)
 	r.CardRepository = cards_repo.NewCardRepo(r.Infrastructure.DB)
 	r.RabbitMQ = rabbitmq.NewConn(r.UserRepository, r.CardRepository, *r.Config)
 	go r.RabbitMQ.NewConsumer(ctx)
 	r.Service = service.New(r.UserRepository, r.CardRepository, r.RabbitMQ)
+}
 
-	// r.registerRepositoriesAndServices(r.Infrastructure.DB)
+func (r *RootBootstrapper) RunAPI() error {
+	ctx := context.Background()
+	r.Infrastructure.Logger = logger.NewLogger()
+
+	r.registerRepositoriesAndServices(ctx, r.Infrastructure.DB)
 	err := r.registerAPIServer(*r.Config)
 	if err != nil {
 		log.Fatal("cant start server")

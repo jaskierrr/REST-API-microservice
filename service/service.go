@@ -30,7 +30,7 @@ type Service interface {
 }
 
 func New(userRepo users_repo.UsersRepo, cardRepo cards_repo.CardsRepo, rabbitmq rabbitmq.RabbitMQ) Service {
-	return service{
+	return &service{
 		userRepo: userRepo,
 		cardRepo: cardRepo,
 		rabbitMQ: rabbitmq,

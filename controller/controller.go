@@ -5,9 +5,11 @@ import (
 	"card-project/models"
 	"card-project/service"
 	"context"
+	"log/slog"
 )
 
 type controller struct {
+	logger slog.Logger
 	service service.Service
 }
 
@@ -23,8 +25,9 @@ type Controller interface {
 	GetCards(ctx context.Context) ([]*models.Card, error)
 }
 
-func New(service service.Service) Controller {
-	return controller{
+func New(service service.Service, logger *slog.Logger) Controller {
+	return &controller{
+		logger: *logger,
 		service: service,
 	}
 }
