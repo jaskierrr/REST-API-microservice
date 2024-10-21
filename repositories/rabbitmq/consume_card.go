@@ -10,7 +10,7 @@ import (
 	"github.com/rabbitmq/amqp091-go"
 )
 
-func (r *rabbitMQ) consumeCardPost(ctx context.Context, msg amqp091.Delivery) {
+func (r *rabbitMQ) ConsumeCardPost(ctx context.Context, msg amqp091.Delivery) {
 	cardData := models.Card{}
 	err := json.Unmarshal(msg.Body, &cardData)
 	if err != nil {
@@ -21,7 +21,7 @@ func (r *rabbitMQ) consumeCardPost(ctx context.Context, msg amqp091.Delivery) {
 		log.Printf("Error post card from consumer: %v", err)
 	}
 }
-func (r *rabbitMQ) consumeCardDelete(ctx context.Context, msg amqp091.Delivery) {
+func (r *rabbitMQ) ConsumeCardDelete(ctx context.Context, msg amqp091.Delivery) {
 	body, _ := strconv.Atoi(string(msg.Body))
 	commandTag, err := r.cardRepo.DeleteCardID(ctx, body)
 	if commandTag.RowsAffected() == 0 {

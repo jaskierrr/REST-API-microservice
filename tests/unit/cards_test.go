@@ -1,4 +1,4 @@
-package handlers
+package handlers_test
 
 import (
 	"card-project/models"
@@ -9,11 +9,8 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func init() {
-	validate = validator.New()
-}
-
 func TestCardPostValidation(t *testing.T) {
+	validate := validator.New(validator.WithRequiredStructEnabled())
 	cases := []struct {
 		name    string
 		payload models.NewCard
@@ -22,9 +19,9 @@ func TestCardPostValidation(t *testing.T) {
 		{
 			name: "valid card",
 			payload: models.NewCard{
-				UserID: 1,
-				BankID: 1,
-				Number: 1234,
+				UserID:     1,
+				BankID:     1,
+				Number:     1234,
 				CreateDate: strfmt.NewDateTime(),
 			},
 			wantErr: false,
@@ -32,9 +29,9 @@ func TestCardPostValidation(t *testing.T) {
 		{
 			name: "missing user id",
 			payload: models.NewCard{
-				UserID: 0,
-				BankID: 1,
-				Number: 1234,
+				UserID:     0,
+				BankID:     1,
+				Number:     1234,
 				CreateDate: strfmt.NewDateTime(),
 			},
 			wantErr: true,
@@ -42,9 +39,9 @@ func TestCardPostValidation(t *testing.T) {
 		{
 			name: "missing bank id",
 			payload: models.NewCard{
-				UserID: 1,
-				BankID: 0,
-				Number: 1234,
+				UserID:     1,
+				BankID:     0,
+				Number:     1234,
 				CreateDate: strfmt.NewDateTime(),
 			},
 			wantErr: true,
@@ -52,8 +49,8 @@ func TestCardPostValidation(t *testing.T) {
 		{
 			name: "missing number",
 			payload: models.NewCard{
-				UserID: 1,
-				BankID: 1,
+				UserID:     1,
+				BankID:     1,
 				CreateDate: strfmt.NewDateTime(),
 			},
 			wantErr: true,
@@ -75,7 +72,7 @@ func TestCardPostValidation(t *testing.T) {
 					errors.WriteString(e.Error())
 				}
 
-				t.Logf("Generated error message:\n %v", errors.String())
+				// t.Logf("Generated error message:\n %v", errors.String())
 
 			} else {
 				if err != nil {

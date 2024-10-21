@@ -3,6 +3,7 @@ package users_repo
 import (
 	"card-project/models"
 	"context"
+	"log/slog"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -17,5 +18,14 @@ func (repo *userRepo) GetUserID(ctx context.Context, id int) (models.User, error
 		QueryRow(ctx, getUserIDQuery, args).
 		Scan(&user.ID, &user.FirstName, &user.LastName)
 
-	return user, err
+	if err != nil {
+		return models.User{}, err
+	}
+
+	repo.logger.Info(
+		"Success GET user from storage",
+		slog.Any("ID", user.ID),
+	)
+
+	return user, nil
 }

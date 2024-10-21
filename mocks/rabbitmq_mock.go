@@ -5,9 +5,7 @@
 package mock
 
 import (
-	config "card-project/config"
 	models "card-project/models"
-	rabbitmq "card-project/repositories/rabbitmq"
 	context "context"
 	reflect "reflect"
 
@@ -145,18 +143,52 @@ func (m *MockRabbitMQ) EXPECT() *MockRabbitMQMockRecorder {
 	return m.recorder
 }
 
-// NewConn mocks base method.
-func (m *MockRabbitMQ) NewConn(userRepo MockuserRepo, cardRepo MockcardRepo, connConfigString string, config config.Config) rabbitmq.RabbitMQ {
+// ConsumeCardDelete mocks base method.
+func (m *MockRabbitMQ) ConsumeCardDelete(ctx context.Context, msg amqp091.Delivery) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "NewConn", userRepo, cardRepo, connConfigString, config)
-	ret0, _ := ret[0].(rabbitmq.RabbitMQ)
-	return ret0
+	m.ctrl.Call(m, "ConsumeCardDelete", ctx, msg)
 }
 
-// NewConn indicates an expected call of NewConn.
-func (mr *MockRabbitMQMockRecorder) NewConn(userRepo, cardRepo, connConfigString, config interface{}) *gomock.Call {
+// ConsumeCardDelete indicates an expected call of ConsumeCardDelete.
+func (mr *MockRabbitMQMockRecorder) ConsumeCardDelete(ctx, msg interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewConn", reflect.TypeOf((*MockRabbitMQ)(nil).NewConn), userRepo, cardRepo, connConfigString, config)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConsumeCardDelete", reflect.TypeOf((*MockRabbitMQ)(nil).ConsumeCardDelete), ctx, msg)
+}
+
+// ConsumeCardPost mocks base method.
+func (m *MockRabbitMQ) ConsumeCardPost(ctx context.Context, msg amqp091.Delivery) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "ConsumeCardPost", ctx, msg)
+}
+
+// ConsumeCardPost indicates an expected call of ConsumeCardPost.
+func (mr *MockRabbitMQMockRecorder) ConsumeCardPost(ctx, msg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConsumeCardPost", reflect.TypeOf((*MockRabbitMQ)(nil).ConsumeCardPost), ctx, msg)
+}
+
+// ConsumeUserDelete mocks base method.
+func (m *MockRabbitMQ) ConsumeUserDelete(ctx context.Context, msg amqp091.Delivery) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "ConsumeUserDelete", ctx, msg)
+}
+
+// ConsumeUserDelete indicates an expected call of ConsumeUserDelete.
+func (mr *MockRabbitMQMockRecorder) ConsumeUserDelete(ctx, msg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConsumeUserDelete", reflect.TypeOf((*MockRabbitMQ)(nil).ConsumeUserDelete), ctx, msg)
+}
+
+// ConsumeUserPost mocks base method.
+func (m *MockRabbitMQ) ConsumeUserPost(ctx context.Context, msg amqp091.Delivery) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "ConsumeUserPost", ctx, msg)
+}
+
+// ConsumeUserPost indicates an expected call of ConsumeUserPost.
+func (mr *MockRabbitMQMockRecorder) ConsumeUserPost(ctx, msg interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ConsumeUserPost", reflect.TypeOf((*MockRabbitMQ)(nil).ConsumeUserPost), ctx, msg)
 }
 
 // NewConsumer mocks base method.
@@ -225,52 +257,4 @@ func (m *MockRabbitMQ) ProducePostUser(ctx context.Context, userData models.User
 func (mr *MockRabbitMQMockRecorder) ProducePostUser(ctx, userData interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ProducePostUser", reflect.TypeOf((*MockRabbitMQ)(nil).ProducePostUser), ctx, userData)
-}
-
-// consumeCardDelete mocks base method.
-func (m *MockRabbitMQ) consumeCardDelete(ctx context.Context, msg amqp091.Delivery) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "consumeCardDelete", ctx, msg)
-}
-
-// consumeCardDelete indicates an expected call of consumeCardDelete.
-func (mr *MockRabbitMQMockRecorder) consumeCardDelete(ctx, msg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "consumeCardDelete", reflect.TypeOf((*MockRabbitMQ)(nil).consumeCardDelete), ctx, msg)
-}
-
-// consumeCardPost mocks base method.
-func (m *MockRabbitMQ) consumeCardPost(ctx context.Context, msg amqp091.Delivery) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "consumeCardPost", ctx, msg)
-}
-
-// consumeCardPost indicates an expected call of consumeCardPost.
-func (mr *MockRabbitMQMockRecorder) consumeCardPost(ctx, msg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "consumeCardPost", reflect.TypeOf((*MockRabbitMQ)(nil).consumeCardPost), ctx, msg)
-}
-
-// consumeUserDelete mocks base method.
-func (m *MockRabbitMQ) consumeUserDelete(ctx context.Context, msg amqp091.Delivery) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "consumeUserDelete", ctx, msg)
-}
-
-// consumeUserDelete indicates an expected call of consumeUserDelete.
-func (mr *MockRabbitMQMockRecorder) consumeUserDelete(ctx, msg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "consumeUserDelete", reflect.TypeOf((*MockRabbitMQ)(nil).consumeUserDelete), ctx, msg)
-}
-
-// consumeUserPost mocks base method.
-func (m *MockRabbitMQ) consumeUserPost(ctx context.Context, msg amqp091.Delivery) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "consumeUserPost", ctx, msg)
-}
-
-// consumeUserPost indicates an expected call of consumeUserPost.
-func (mr *MockRabbitMQMockRecorder) consumeUserPost(ctx, msg interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "consumeUserPost", reflect.TypeOf((*MockRabbitMQ)(nil).consumeUserPost), ctx, msg)
 }

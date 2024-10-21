@@ -3,6 +3,7 @@ package cards_repo
 import (
 	"card-project/models"
 	"context"
+	"log/slog"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -17,5 +18,15 @@ func (repo *cardRepo) GetCardID(ctx context.Context, id int) (models.Card, error
 		QueryRow(ctx, getCardIDQuery, args).
 		Scan(&card.ID, &card.UserID, &card.BankID, &card.Number, &card.CreateDate)
 
-	return card, err
+	if err != nil {
+		return models.Card{}, err
+	}
+
+	repo.logger.Info(
+		"Success GET card from storage",
+		slog.Any("ID", card.ID),
+	)
+
+
+	return card, nil
 }

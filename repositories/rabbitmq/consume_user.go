@@ -10,7 +10,7 @@ import (
 	"github.com/rabbitmq/amqp091-go"
 )
 
-func (r *rabbitMQ) consumeUserPost(ctx context.Context, msg amqp091.Delivery) {
+func (r *rabbitMQ) ConsumeUserPost(ctx context.Context, msg amqp091.Delivery) {
 	userData := models.User{}
 	err := json.Unmarshal(msg.Body, &userData)
 	if err != nil {
@@ -22,7 +22,7 @@ func (r *rabbitMQ) consumeUserPost(ctx context.Context, msg amqp091.Delivery) {
 	}
 }
 
-func (r *rabbitMQ) consumeUserDelete(ctx context.Context, msg amqp091.Delivery) {
+func (r *rabbitMQ) ConsumeUserDelete(ctx context.Context, msg amqp091.Delivery) {
 	body, _ := strconv.Atoi(string(msg.Body))
 	commandTag, err := r.userRepo.DeleteUserID(ctx, body)
 	if commandTag.RowsAffected() == 0 {

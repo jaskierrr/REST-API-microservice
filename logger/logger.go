@@ -1,12 +1,21 @@
 package logger
 
 import (
+	"card-project/logger/prettylog"
 	"log/slog"
 	"os"
 )
 
 func NewLogger() *slog.Logger {
-	log := slog.New(slog.NewJSONHandler(os.Stderr, nil))
-	// slog.SetDefault(log)
+	opts := prettylog.PrettyHandlerOptions{
+		SlogOpts: &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		},
+	}
+
+	handler := opts.NewPrettyHandler(os.Stdout)
+	log := slog.New(handler)
+	slog.SetDefault(log)
+
 	return log
 }

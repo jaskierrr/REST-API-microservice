@@ -31,6 +31,8 @@ func (r *rabbitMQ) NewConsumer(ctx context.Context) {
 		log.Fatalf("Failed to declare a consumer in rabbitmq: %v\n", err)
 	}
 
+	r.logger.Info("RabbitMQ consumer started")
+
 	go func() {
 		for msg := range msgs {
 			switch {
@@ -39,11 +41,11 @@ func (r *rabbitMQ) NewConsumer(ctx context.Context) {
 					switch {
 					case msg.Headers[headersMethod] == "POST":
 						{
-							r.consumeUserPost(ctx, msg)
+							r.ConsumeUserPost(ctx, msg)
 						}
 					case msg.Headers[headersMethod] == "DELETE":
 						{
-							r.consumeUserDelete(ctx, msg)
+							r.ConsumeUserDelete(ctx, msg)
 						}
 					}
 				}
@@ -52,11 +54,11 @@ func (r *rabbitMQ) NewConsumer(ctx context.Context) {
 					switch {
 					case msg.Headers[headersMethod] == "POST":
 						{
-							r.consumeCardPost(ctx, msg)
+							r.ConsumeCardPost(ctx, msg)
 						}
 					case msg.Headers[headersMethod] == "DELETE":
 						{
-							r.consumeCardDelete(ctx, msg)
+							r.ConsumeCardDelete(ctx, msg)
 						}
 					}
 				}

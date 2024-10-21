@@ -1,4 +1,4 @@
-package handlers
+package handlers_test
 
 import (
 	"card-project/models"
@@ -8,11 +8,8 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func init() {
-	validate = validator.New()
-}
-
 func TestUserPostValidation(t *testing.T) {
+	validate := validator.New(validator.WithRequiredStructEnabled())
 	cases := []struct {
 		name    string
 		payload models.NewUser
@@ -30,7 +27,7 @@ func TestUserPostValidation(t *testing.T) {
 			name: "missing first name",
 			payload: models.NewUser{
 				FirstName: "",
-				LastName: "Shash",
+				LastName:  "Shash",
 			},
 			wantErr: true,
 		},
@@ -38,7 +35,7 @@ func TestUserPostValidation(t *testing.T) {
 			name: "missing last name",
 			payload: models.NewUser{
 				FirstName: "Ivan",
-				LastName: "",
+				LastName:  "",
 			},
 			wantErr: true,
 		},
@@ -59,7 +56,7 @@ func TestUserPostValidation(t *testing.T) {
 					errors.WriteString(e.Error())
 				}
 
-				t.Logf("Generated error message:\n %v", errors.String())
+				// t.Logf("Generated error message:\n %v", errors.String())
 
 			} else {
 				if err != nil {

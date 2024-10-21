@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"log/slog"
 
 	"github.com/jackc/pgx/v5/pgconn"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -15,9 +16,12 @@ import (
 const (
 	headersMethod = "method"
 	headersItem   = "item"
+	rabbitConfigString = "amqp://%s:%s@%s:%s/"
 )
 
 type rabbitMQ struct {
+	logger *slog.Logger
+
 	conn    *amqp.Connection
 	channel *amqp.Channel
 
@@ -36,28 +40,24 @@ type cardRepo interface {
 }
 
 type RabbitMQ interface {
-	NewConn(userRepo userRepo, cardRepo cardRepo, connConfigString string, config config.Config) RabbitMQ
 	ProducePostUser(ctx context.Context, userData models.User) error
 	ProduceDeleteUser(ctx context.Context, id int) error
 	ProducePostCard(ctx context.Context, cardData models.Card) error
 	ProduceDeleteCard(ctx context.Context, id int) error
 
 	NewConsumer(ctx context.Context)
-	consumeUserPost(ctx context.Context, msg amqp.Delivery)
-	consumeUserDelete(ctx context.Context, msg amqp.Delivery)
-	consumeCardPost(ctx context.Context, msg amqp.Delivery)
-	consumeCardDelete(ctx context.Context, msg amqp.Delivery)
+	ConsumeUserPost(ctx context.Context, msg amqp.Delivery)
+	ConsumeUserDelete(ctx context.Context, msg amqp.Delivery)
+	ConsumeCardPost(ctx context.Context, msg amqp.Delivery)
+	ConsumeCardDelete(ctx context.Context, msg amqp.Delivery)
 }
 
-func NewRabbitMQ() RabbitMQ {
-	return &rabbitMQ{}
-}
-
-func (r *rabbitMQ) NewConn(userRepo userRepo, cardRepo cardRepo, connConfigString string, config config.Config) RabbitMQ {
-	connString := fmt.Sprintf(connConfigString, config.RabbitMQ.User, config.RabbitMQ.Password, config.RabbitMQ.Host, config.RabbitMQ.Port)
+func NewConn(userRepo userRepo, cardRepo cardRepo, config config.Config, logger *slog.Logger) RabbitMQ {
+	connString := fmt.Sprintf(rabbitConfigString, config.RabbitMQ.User, config.RabbitMQ.Password, config.RabbitMQ.Host, config.RabbitMQ.Port)
 	conn, err := amqp.Dial(connString)
 	if err != nil {
 		log.Fatalf("Unable to connect to rabbitmq: %v\n", err)
+		log.Fatal()
 	}
 
 	channel, err := conn.Channel()
@@ -65,11 +65,12 @@ func (r *rabbitMQ) NewConn(userRepo userRepo, cardRepo cardRepo, connConfigStrin
 		log.Fatalf("Failed to open a channel in rabbitmq: %v\n", err)
 	}
 
+	logger.Info("New RabbitMQ connection opened")
 	return &rabbitMQ{
+		logger: logger,
 		conn:     conn,
 		channel:  channel,
 		userRepo: userRepo,
 		cardRepo: cardRepo,
 	}
-
 }

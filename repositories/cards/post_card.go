@@ -3,6 +3,7 @@ package cards_repo
 import (
 	"card-project/models"
 	"context"
+	"log/slog"
 	"time"
 
 	"github.com/go-openapi/strfmt"
@@ -26,5 +27,14 @@ func (repo *cardRepo) PostCard(ctx context.Context, cardData models.Card) (model
 
 	card.CreateDate = strfmt.DateTime(createTime)
 
-	return card, err
+	if err != nil {
+		return models.Card{}, err
+	}
+
+	repo.logger.Info(
+		"Success POST card from storage",
+		slog.Any("ID", card.ID),
+	)
+
+	return card, nil
 }

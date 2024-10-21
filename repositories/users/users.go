@@ -5,6 +5,7 @@ import (
 	"card-project/database"
 	"card-project/models"
 	"context"
+	"log/slog"
 
 	"github.com/jackc/pgx/v5/pgconn"
 )
@@ -18,6 +19,7 @@ const (
 
 type userRepo struct {
 	db database.DB
+	logger *slog.Logger
 }
 
 type UsersRepo interface {
@@ -27,8 +29,9 @@ type UsersRepo interface {
 	GetUsers(ctx context.Context) ([]*models.User, error)
 }
 
-func NewUserRepo(db database.DB) UsersRepo {
+func NewUserRepo(db database.DB, logger *slog.Logger) UsersRepo {
 	return &userRepo{
 		db: db,
+		logger: logger,
 	}
 }

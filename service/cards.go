@@ -10,9 +10,7 @@ import (
 )
 
 func (s service) GetCardID(ctx context.Context, id int) (models.Card, error) {
-	card, err := s.cardRepo.GetCardID(ctx, id)
-
-	return card, err
+	return s.cardRepo.GetCardID(ctx, id)
 }
 
 func (s service) PostCard(ctx context.Context, cardData models.NewCard) (models.Card, error) {
@@ -25,20 +23,18 @@ func (s service) PostCard(ctx context.Context, cardData models.NewCard) (models.
 		Number:     cardData.Number,
 		CreateDate: strfmt.DateTime(time.Now()),
 	}
-
 	err := s.rabbitMQ.ProducePostCard(ctx, card)
 
-	return card, err
+	if err != nil {
+		return models.Card{}, err
+	}
+	return card, nil
 }
 
 func (s service) DeleteCardID(ctx context.Context, id int) error {
-	err := s.rabbitMQ.ProduceDeleteCard(ctx, id)
-
-	return err
+	return s.rabbitMQ.ProduceDeleteCard(ctx, id)
 }
 
 func (s service) GetCards(ctx context.Context) ([]*models.Card, error) {
-	card, err := s.cardRepo.GetCards(ctx)
-
-	return card, err
+	return s.cardRepo.GetCards(ctx)
 }
