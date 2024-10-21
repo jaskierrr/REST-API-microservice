@@ -57,7 +57,7 @@ func Test_DeleteCardID(t *testing.T) {
 
 	resErr := operations.NewDeleteCardsIDDefault(500).WithPayload(&models.ErrorResponse{
 		Error: &models.ErrorResponseAO0Error{
-			Message: "Failed to DELETE Card in storage, card id: " + strconv.FormatInt(reqArgErr.ID, 10) + " " + errors.New("no rows in result set").Error(),
+			Message: "Failed to DELETE card from storage, card id: " + strconv.FormatInt(reqArgErr.ID, 10) + " " + errors.New("no rows in result set").Error(),
 		},
 	})
 

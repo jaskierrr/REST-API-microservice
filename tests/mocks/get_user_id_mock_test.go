@@ -64,7 +64,7 @@ func Test_GetUserID(t *testing.T) {
 
 	resErr := operations.NewGetUsersIDDefault(404).WithPayload(&models.ErrorResponse{
 		Error: &models.ErrorResponseAO0Error{
-			Message: "Failed to GET User in storage, user id: " + strconv.FormatInt(reqArgErr.ID, 10) + " " + errors.New("no rows in result set").Error(),
+			Message: "Failed to GET user from storage, user id: " + strconv.FormatInt(reqArgErr.ID, 10) + " " + errors.New("no rows in result set").Error(),
 		},
 	})
 

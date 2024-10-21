@@ -68,7 +68,7 @@ func Test_GetCardID(t *testing.T) {
 
 	resErr := operations.NewGetCardsIDDefault(404).WithPayload(&models.ErrorResponse{
 		Error: &models.ErrorResponseAO0Error{
-			Message: "Failed to GET Card in storage, card id: " + strconv.FormatInt(reqArgErr.ID, 10) + " " + errors.New("no rows in result set").Error(),
+			Message: "Failed to GET card from storage, card id: " + strconv.FormatInt(reqArgErr.ID, 10) + " " + errors.New("no rows in result set").Error(),
 		},
 	})
 
