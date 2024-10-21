@@ -79,12 +79,13 @@ func (r *RootBootstrapper) registerAPIServer(cfg config.Config) error {
 }
 
 func (r *RootBootstrapper) registerRepositoriesAndServices(ctx context.Context, db database.DB) {
-	r.Infrastructure.DB = database.NewDB().NewConn(ctx, *r.Config)
-	r.UserRepository = users_repo.NewUserRepo(r.Infrastructure.DB)
-	r.CardRepository = cards_repo.NewCardRepo(r.Infrastructure.DB)
-	r.RabbitMQ = rabbitmq.NewConn(r.UserRepository, r.CardRepository, *r.Config)
+	logger := r.Infrastructure.Logger
+	r.Infrastructure.DB = database.NewDB().NewConn(ctx, *r.Config, logger)
+	r.UserRepository = users_repo.NewUserRepo(r.Infrastructure.DB, logger)
+	r.CardRepository = cards_repo.NewCardRepo(r.Infrastructure.DB, logger)
+	r.RabbitMQ = rabbitmq.NewConn(r.UserRepository, r.CardRepository, *r.Config, logger)
 	go r.RabbitMQ.NewConsumer(ctx)
-	r.Service = service.New(r.UserRepository, r.CardRepository, r.RabbitMQ)
+	r.Service = service.New(r.UserRepository, r.CardRepository, r.RabbitMQ, logger)
 }
 
 func (r *RootBootstrapper) RunAPI() error {

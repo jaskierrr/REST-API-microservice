@@ -41,7 +41,7 @@ func Test_DeleteCardID(t *testing.T) {
 		userRepo: userRepoMock,
 	}
 
-	service := service.New(userRepoMock, cardRepoMock, rabbitmqMock)
+	service := service.New(userRepoMock, cardRepoMock, rabbitmqMock, logger)
 	controller := controller.New(service, logger)
 	h := handlers.New(controller, validator.New(validator.WithRequiredStructEnabled()), logger)
 

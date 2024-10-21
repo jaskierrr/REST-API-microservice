@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"log/slog"
 
 	"github.com/jackc/pgx/v5/pgconn"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -19,6 +20,8 @@ const (
 )
 
 type rabbitMQ struct {
+	logger *slog.Logger
+
 	conn    *amqp.Connection
 	channel *amqp.Channel
 
@@ -49,11 +52,12 @@ type RabbitMQ interface {
 	ConsumeCardDelete(ctx context.Context, msg amqp.Delivery)
 }
 
-func NewConn(userRepo userRepo, cardRepo cardRepo, config config.Config) RabbitMQ {
+func NewConn(userRepo userRepo, cardRepo cardRepo, config config.Config, logger *slog.Logger) RabbitMQ {
 	connString := fmt.Sprintf(rabbitConfigString, config.RabbitMQ.User, config.RabbitMQ.Password, config.RabbitMQ.Host, config.RabbitMQ.Port)
 	conn, err := amqp.Dial(connString)
 	if err != nil {
 		log.Fatalf("Unable to connect to rabbitmq: %v\n", err)
+		log.Fatal()
 	}
 
 	channel, err := conn.Channel()
@@ -61,7 +65,9 @@ func NewConn(userRepo userRepo, cardRepo cardRepo, config config.Config) RabbitM
 		log.Fatalf("Failed to open a channel in rabbitmq: %v\n", err)
 	}
 
+	logger.Info("New RabbitMQ connection opened")
 	return &rabbitMQ{
+		logger: logger,
 		conn:     conn,
 		channel:  channel,
 		userRepo: userRepo,

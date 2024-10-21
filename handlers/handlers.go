@@ -11,7 +11,7 @@ import (
 )
 
 type handlers struct {
-	logger slog.Logger
+	logger *slog.Logger
 	controller controller.Controller
 }
 
@@ -35,7 +35,7 @@ type Handlers interface {
 func New(controller controller.Controller, validator *validator.Validate, logger *slog.Logger) Handlers {
 	validate = validator
 	return &handlers{
-		logger: *logger,
+		logger: logger,
 		controller: controller,
 	}
 }

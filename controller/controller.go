@@ -9,7 +9,7 @@ import (
 )
 
 type controller struct {
-	logger slog.Logger
+	logger *slog.Logger
 	service service.Service
 }
 
@@ -27,7 +27,7 @@ type Controller interface {
 
 func New(service service.Service, logger *slog.Logger) Controller {
 	return &controller{
-		logger: *logger,
+		logger: logger,
 		service: service,
 	}
 }

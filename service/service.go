@@ -3,17 +3,18 @@ package service
 
 import (
 	"card-project/models"
-	"card-project/repositories/rabbitmq"
 	cards_repo "card-project/repositories/cards"
+	"card-project/repositories/rabbitmq"
 	users_repo "card-project/repositories/users"
 	"context"
-
+	"log/slog"
 )
 
 type service struct {
+	logger *slog.Logger
+
 	userRepo users_repo.UsersRepo
 	cardRepo cards_repo.CardsRepo
-
 	rabbitMQ rabbitmq.RabbitMQ
 }
 
@@ -29,8 +30,10 @@ type Service interface {
 	GetCards(ctx context.Context) ([]*models.Card, error)
 }
 
-func New(userRepo users_repo.UsersRepo, cardRepo cards_repo.CardsRepo, rabbitmq rabbitmq.RabbitMQ) Service {
+func New(userRepo users_repo.UsersRepo, cardRepo cards_repo.CardsRepo, rabbitmq rabbitmq.RabbitMQ, logger *slog.Logger) Service {
 	return &service{
+		logger: logger,
+
 		userRepo: userRepo,
 		cardRepo: cardRepo,
 		rabbitMQ: rabbitmq,

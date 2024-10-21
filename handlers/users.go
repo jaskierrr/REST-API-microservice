@@ -15,9 +15,13 @@ func (h *handlers) GetUsers(params operations.GetUsersParams) middleware.Respond
 	user, err := h.controller.GetUsers(ctx)
 
 	if err != nil {
+		h.logger.Error(
+			"Failed to GET users from storage",
+			slog.String("error", err.Error()),
+		)
 		return operations.NewGetUsersDefault(404).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to GET Users in storage " + err.Error(),
+				Message: "Failed to GET users in storage " + err.Error(),
 			},
 		})
 	}
@@ -31,7 +35,7 @@ func (h *handlers) GetUsersID(params operations.GetUsersIDParams) middleware.Res
 	if params.ID == 0 {
 		return operations.NewGetUsersIDDefault(404).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to GET User from storage, user id = 0",
+				Message: "Failed to GET user from storage, user id = 0",
 			},
 		})
 	}
@@ -42,7 +46,7 @@ func (h *handlers) GetUsersID(params operations.GetUsersIDParams) middleware.Res
 	if err != nil {
 		return operations.NewGetUsersIDDefault(404).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to GET User from storage, user id: " + convertI64tStr(params.ID) + " " + err.Error(),
+				Message: "Failed to GET user from storage, user id: " + convertI64tStr(params.ID) + " " + err.Error(),
 			},
 		})
 	}
@@ -56,7 +60,7 @@ func (h *handlers) DeleteUsersID(params operations.DeleteUsersIDParams) middlewa
 	if params.ID == 0 {
 		return operations.NewDeleteUsersIDDefault(404).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to DELETE User from storage, user id = 0",
+				Message: "Failed to DELETE user from storage, user id = 0",
 			},
 		})
 	}
@@ -67,7 +71,7 @@ func (h *handlers) DeleteUsersID(params operations.DeleteUsersIDParams) middlewa
 	if err != nil {
 		return operations.NewDeleteUsersIDDefault(500).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to DELETE User from storage, user id: " + convertI64tStr(params.ID) + " " + err.Error(),
+				Message: "Failed to DELETE user from storage, user id: " + convertI64tStr(params.ID) + " " + err.Error(),
 			},
 		})
 	}
@@ -83,9 +87,14 @@ func (h *handlers) PostUsers(params operations.PostUsersParams) middleware.Respo
 
 	err := validate.Struct(params.User)
 	if err != nil {
+		h.logger.Error(
+			"Failed to POST user in storage",
+			slog.Any("user", params.User),
+			slog.String("error", err.Error()),
+		)
 		return operations.NewGetUsersIDDefault(500).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to POST User in storage " + err.Error(),
+				Message: "Failed to POST user in storage " + err.Error(),
 			},
 		})
 	}
@@ -94,9 +103,14 @@ func (h *handlers) PostUsers(params operations.PostUsersParams) middleware.Respo
 	user, err := h.controller.PostUser(ctx, *params.User)
 
 	if err != nil {
+		h.logger.Error(
+			"Failed to POST user in storage",
+			slog.Any("user", params.User),
+			slog.String("error", err.Error()),
+		)
 		return operations.NewGetUsersIDDefault(500).WithPayload(&models.ErrorResponse{
 			Error: &models.ErrorResponseAO0Error{
-				Message: "Failed to POST User in storage " + err.Error(),
+				Message: "Failed to POST user in storage " + err.Error(),
 			},
 		})
 	}

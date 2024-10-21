@@ -3,13 +3,14 @@ package users_repo
 import (
 	"card-project/models"
 	"context"
+	"log/slog"
 
 	"github.com/jackc/pgx/v5"
 )
 
 func (repo *userRepo) PostUser(ctx context.Context, userData models.User) (models.User, error) {
 	args := pgx.NamedArgs{
-		"id": userData.ID,
+		"id":        userData.ID,
 		"firstName": userData.FirstName,
 		"lastName":  userData.LastName,
 	}
@@ -19,5 +20,14 @@ func (repo *userRepo) PostUser(ctx context.Context, userData models.User) (model
 		QueryRow(ctx, postUserQuery, args).
 		Scan(&user.ID, &user.FirstName, &user.LastName)
 
-	return user, err
+	if err != nil {
+		return models.User{}, err
+	}
+
+	repo.logger.Info(
+		"Success POST user from storage",
+		slog.Any("ID", user.ID),
+	)
+
+	return user, nil
 }

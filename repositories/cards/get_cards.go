@@ -23,5 +23,7 @@ func (repo *cardRepo) GetCards(ctx context.Context) ([]*models.Card, error) {
 		cards = append(cards, &card)
 	}
 
+	repo.logger.Info("Success GET cards from storage")
+
 	return cards, err
 }

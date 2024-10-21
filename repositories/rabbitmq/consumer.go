@@ -31,6 +31,8 @@ func (r *rabbitMQ) NewConsumer(ctx context.Context) {
 		log.Fatalf("Failed to declare a consumer in rabbitmq: %v\n", err)
 	}
 
+	r.logger.Info("RabbitMQ consumer started")
+
 	go func() {
 		for msg := range msgs {
 			switch {

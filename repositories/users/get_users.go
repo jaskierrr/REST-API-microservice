@@ -24,5 +24,7 @@ func (repo *userRepo) GetUsers(ctx context.Context) ([]*models.User, error) {
 		users = append(users, &user)
 	}
 
+	repo.logger.Info("Success GET users from storage")
+
 	return users, err
 }
