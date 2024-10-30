@@ -1,11 +1,11 @@
-# project with bank cards
+# API микросервис для управления данными
+Разработал микросервис для хранения данных (пользователи, карточки, банки) с полным CRUD API.
 
-swagger generate server -f ./swagger.yaml --exclude-main
+Применил принципы чистой архитектуры, сгенерировал основу API через Swagger, настроил взаимодействие с Postgres и RabbitMQ.
 
-docker-compose up --build -d
+Настроил запуск микросервиса через docker-compose.
+Написал тесты, сгенерировал моки.
 
-docker-compose up -d
+Создал и настроил pipeline: запросы проходят через хендлеры, валидируются, затем отправляются через контроллер в сервис, продюсируются в Rabbit и обрабатываются консьюмером, чтобы записать данные в Postgres.
 
-docker-compose ps
-
-docker exec -it card-project sh
+**Стек: Go, Swagger, Postgres, RabbitMQ, Docker**
